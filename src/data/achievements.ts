@@ -60,24 +60,6 @@ export const achievements: Achievement[] = [
     year: "2025",
     detail: "2nd place in the college-level ICPC 2025 contest.",
   },
-  {
-    id: "amazon-ml-25",
-    title: "Selected",
-    event: "Amazon ML Summer School 2025",
-    category: "ML Program",
-    rank: "special",
-    year: "2025",
-    detail: "Selected for Amazon ML Summer School 2025.",
-  },
-  {
-    id: "amazon-ml-26",
-    title: "Selected",
-    event: "Amazon ML Summer School 2026",
-    category: "ML Program",
-    rank: "special",
-    year: "2026",
-    detail: "Selected for Amazon ML Summer School 2026 — two consecutive years.",
-  },
 ];
 
 export const stats = [

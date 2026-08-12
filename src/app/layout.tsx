@@ -1,46 +1,33 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Navbar from "@/components/layout/Navbar";
+import CursorDot from "@/components/ui/CursorDot";
 
 export const metadata: Metadata = {
-  title: "Kritik Jain — Software Engineer, AI Systems & Research",
+  title: {
+    default: "Kritik Jain — Software Engineer · AI · Research",
+    template: "%s · Kritik Jain",
+  },
   description:
-    "Personal portfolio of Kritik Jain — Final-year B.Tech IT student at IIIT Bhopal. Building software, AI systems, and research-driven products.",
-  keywords: [
-    "Kritik Jain",
-    "Software Engineer",
-    "AI Engineer",
-    "Backend Engineer",
-    "Machine Learning",
-    "IIIT Bhopal",
-    "Portfolio",
-    "Research",
-  ],
+    "Personal website of Kritik Jain — Software engineer, AI systems builder and researcher. Final-year B.Tech IT at IIIT Bhopal.",
+  keywords: ["Kritik Jain", "Software Engineer", "AI Engineer", "Backend", "Machine Learning", "IIIT Bhopal", "Research"],
   authors: [{ name: "Kritik Jain" }],
-  creator: "Kritik Jain",
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "Kritik Jain — Software Engineer, AI Systems & Research",
-    description:
-      "Building software, AI systems, and research-driven products. Final-year B.Tech IT at IIIT Bhopal.",
+    title: "Kritik Jain — Software Engineer · AI · Research",
+    description: "Building software systems, AI products, and research-driven experiences.",
     siteName: "Kritik Jain",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kritik Jain — Software Engineer, AI Systems & Research",
-    description: "Building software, AI systems, and research-driven products.",
+    title: "Kritik Jain — Software Engineer · AI · Research",
+    description: "Building software systems, AI products, and research-driven experiences.",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -52,6 +39,8 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <CursorDot />
+        <Navbar />
         {children}
       </body>
     </html>

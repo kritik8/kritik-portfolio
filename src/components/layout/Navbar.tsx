@@ -1,118 +1,116 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 
-const navItems = [
-  { label: "About", href: "#about" },
-  { label: "Work", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-  { label: "Research", href: "#research" },
-  { label: "Contact", href: "#contact" },
+const navLinks = [
+  { href: "/about", label: "About" },
+  { href: "/work", label: "Work" },
+  { href: "/projects", label: "Projects" },
+  { href: "/research", label: "Research" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const h = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", h, { passive: true });
+    return () => window.removeEventListener("scroll", h);
   }, []);
 
-  const handleNav = (href: string) => {
+  useEffect(() => {
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
+  }, [pathname]);
 
   return (
     <>
       <motion.header
-        initial={{ y: -20, opacity: 0 }}
+        initial={{ y: -16, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: 0.55, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           right: 0,
           zIndex: 1000,
-          padding: "1rem 0",
-          transition: "background 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease",
-          background: scrolled ? "rgba(250,250,250,0.85)" : "transparent",
-          backdropFilter: scrolled ? "blur(12px)" : "none",
-          boxShadow: scrolled ? "0 1px 0 rgba(0,0,0,0.06)" : "none",
+          padding: "0.9rem 0",
+          background: scrolled ? "rgba(248,247,244,0.88)" : "transparent",
+          backdropFilter: scrolled ? "blur(14px)" : "none",
+          borderBottom: scrolled ? "1px solid rgba(227,226,219,0.7)" : "1px solid transparent",
+          transition: "background 0.3s, backdrop-filter 0.3s, border-color 0.3s",
         }}
       >
-        <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          {/* Logo / Name */}
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        <div className="wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          {/* Logo */}
+          <Link
+            href="/"
             style={{
               fontFamily: "var(--font-serif)",
-              fontSize: "1.1rem",
+              fontSize: "1.05rem",
               fontWeight: 500,
               color: "var(--text)",
+              textDecoration: "none",
               letterSpacing: "-0.01em",
-              background: "none",
-              border: "none",
-              cursor: "none",
-              padding: 0,
             }}
           >
             Kritik Jain
-          </button>
+          </Link>
 
           {/* Desktop nav */}
-          <nav aria-label="Main navigation" style={{ display: "flex", gap: "0.25rem" }} className="hidden-mobile">
-            {navItems.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => handleNav(item.href)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  padding: "0.4rem 0.75rem",
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                  color: "var(--text-secondary)",
-                  cursor: "none",
-                  borderRadius: "var(--radius-md)",
-                  transition: "color 0.2s ease, background 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  (e.target as HTMLElement).style.color = "var(--text)";
-                  (e.target as HTMLElement).style.background = "var(--surface)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.target as HTMLElement).style.color = "var(--text-secondary)";
-                  (e.target as HTMLElement).style.background = "transparent";
-                }}
-              >
-                {item.label}
-              </button>
-            ))}
+          <nav
+            aria-label="Primary"
+            style={{ display: "flex", alignItems: "center", gap: "0.15rem" }}
+            className="nav-desktop"
+          >
+            {navLinks.map((link) => {
+              const active = pathname === link.href || pathname.startsWith(link.href + "/");
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  style={{
+                    padding: "0.4rem 0.8rem",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.84rem",
+                    fontWeight: active ? 600 : 500,
+                    color: active ? "var(--text)" : "var(--text-2)",
+                    textDecoration: "none",
+                    borderRadius: "var(--r-md)",
+                    background: active ? "var(--surface)" : "transparent",
+                    transition: "background 0.18s, color 0.18s",
+                    position: "relative",
+                  }}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            <div
+              style={{ width: 1, height: 18, background: "var(--border)", margin: "0 0.4rem" }}
+              aria-hidden="true"
+            />
             <a
               href="https://github.com/kritik8"
               target="_blank"
               rel="noopener noreferrer"
               style={{
                 padding: "0.4rem 0.9rem",
-                background: "var(--text)",
-                color: "var(--bg)",
                 fontFamily: "var(--font-sans)",
-                fontSize: "0.85rem",
+                fontSize: "0.84rem",
                 fontWeight: 500,
-                borderRadius: "var(--radius-md)",
+                color: "var(--bg)",
+                background: "var(--text)",
+                borderRadius: "var(--r-md)",
                 textDecoration: "none",
-                marginLeft: "0.5rem",
-                transition: "opacity 0.2s ease",
+                transition: "opacity 0.18s",
               }}
-              onMouseEnter={(e) => { (e.target as HTMLElement).style.opacity = "0.8"; }}
-              onMouseLeave={(e) => { (e.target as HTMLElement).style.opacity = "1"; }}
             >
               GitHub ↗
             </a>
@@ -120,17 +118,19 @@ export default function Navbar() {
 
           {/* Mobile hamburger */}
           <button
-            className="show-mobile"
+            className="nav-mobile-btn"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
             style={{
               background: "none",
               border: "1px solid var(--border)",
-              padding: "0.4rem 0.6rem",
-              borderRadius: "var(--radius-md)",
+              borderRadius: "var(--r-md)",
+              padding: "0.38rem 0.55rem",
               cursor: "pointer",
-              fontSize: "1.1rem",
               color: "var(--text)",
+              fontSize: "1rem",
+              lineHeight: 1,
             }}
           >
             {mobileOpen ? "✕" : "≡"}
@@ -142,10 +142,10 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
+            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
             style={{
               position: "fixed",
               top: "4rem",
@@ -154,50 +154,49 @@ export default function Navbar() {
               zIndex: 999,
               background: "var(--bg-card)",
               border: "1px solid var(--border)",
-              borderRadius: "var(--radius-lg)",
-              padding: "0.75rem",
-              boxShadow: "var(--shadow-lg)",
+              borderRadius: "var(--r-lg)",
+              padding: "0.6rem",
+              boxShadow: "var(--sh-lg)",
             }}
+            aria-label="Mobile navigation"
           >
-            {navItems.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => handleNav(item.href)}
-                style={{
-                  display: "block",
-                  width: "100%",
-                  textAlign: "left",
-                  background: "none",
-                  border: "none",
-                  padding: "0.7rem 0.9rem",
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "1rem",
-                  fontWeight: 500,
-                  color: "var(--text)",
-                  cursor: "pointer",
-                  borderRadius: "var(--radius-md)",
-                  transition: "background 0.15s ease",
-                }}
-                onMouseEnter={(e) => { (e.target as HTMLElement).style.background = "var(--surface)"; }}
-                onMouseLeave={(e) => { (e.target as HTMLElement).style.background = "transparent"; }}
-              >
-                {item.label}
-              </button>
-            ))}
+            {navLinks.map((link) => {
+              const active = pathname === link.href || pathname.startsWith(link.href + "/");
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  style={{
+                    display: "block",
+                    padding: "0.75rem 0.9rem",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.95rem",
+                    fontWeight: active ? 600 : 500,
+                    color: active ? "var(--text)" : "var(--text-2)",
+                    textDecoration: "none",
+                    borderRadius: "var(--r-md)",
+                    background: active ? "var(--surface)" : "transparent",
+                    transition: "background 0.15s",
+                  }}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            <div style={{ margin: "0.4rem 0", height: 1, background: "var(--border)" }} />
             <a
               href="https://github.com/kritik8"
               target="_blank"
               rel="noopener noreferrer"
               style={{
                 display: "block",
-                marginTop: "0.5rem",
-                padding: "0.7rem 0.9rem",
-                background: "var(--text)",
-                color: "var(--bg)",
+                padding: "0.75rem 0.9rem",
                 fontFamily: "var(--font-sans)",
                 fontSize: "0.95rem",
                 fontWeight: 500,
-                borderRadius: "var(--radius-md)",
+                color: "var(--bg)",
+                background: "var(--text)",
+                borderRadius: "var(--r-md)",
                 textDecoration: "none",
                 textAlign: "center",
               }}
@@ -209,11 +208,11 @@ export default function Navbar() {
       </AnimatePresence>
 
       <style>{`
-        .hidden-mobile { display: flex; }
-        .show-mobile { display: none; }
+        .nav-desktop { display: flex; }
+        .nav-mobile-btn { display: none; }
         @media (max-width: 768px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: flex !important; }
+          .nav-desktop { display: none !important; }
+          .nav-mobile-btn { display: block !important; }
         }
       `}</style>
     </>
