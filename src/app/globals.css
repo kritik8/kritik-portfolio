@@ -1,26 +1,190 @@
 @import "tailwindcss";
 
+
+/* ─── Design Tokens ─────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Colors — light theme */
+  --bg: #fafafa;
+  --bg-subtle: #f4f4f0;
+  --bg-card: #ffffff;
+  --surface: #f0efeb;
+  --border: #e2e2dc;
+  --border-subtle: #eeede9;
+  --text: #0f0f0e;
+  --text-secondary: #5a5a56;
+  --text-muted: #9a9a96;
+  --text-accent: #1a1a18;
+  --accent: #0f0f0e;
+  --accent-warm: #c8a96e;
+
+  /* Spacing */
+  --section-gap: 7rem;
+  --container-max: 1200px;
+  --container-padding: 2rem;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.03);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+
+  /* Noise texture */
+  --noise-opacity: 0.025;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Base Reset ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-size: 16px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* ─── Noise texture overlay ──────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+/* ─── Custom cursor (desktop only) ──────────────────────── */
+@media (pointer: fine) {
+  html { cursor: none; }
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ─── Focus Visible ──────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ─── Selection ──────────────────────────────────────────── */
+::selection {
+  background: rgba(15,15,14,0.12);
+  color: var(--text);
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Utility Classes ────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --container-padding: 1.25rem;
+    --section-gap: 4.5rem;
+  }
+}
+
+@media (max-width: 430px) {
+  :root {
+    --container-padding: 1rem;
+    --section-gap: 3.5rem;
+  }
+}
+
+/* Section spacing */
+.section {
+  padding-block: var(--section-gap);
+}
+
+/* Grayscale logo treatment */
+.logo-mono {
+  filter: grayscale(100%) brightness(0.15) contrast(1.2);
+  transition: filter 0.3s ease;
+}
+
+.logo-mono:hover {
+  filter: grayscale(100%) brightness(0.3) contrast(1.1);
+}
+
+/* Editorial label */
+.label-editorial {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Thin line separator */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ─── Tag pill ───────────────────────────────────────────── */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+/* ─── Experience node ────────────────────────────────────── */
+.exp-node {
+  position: absolute;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
