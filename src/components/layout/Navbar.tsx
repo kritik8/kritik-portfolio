@@ -1,116 +1,142 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 
-const navLinks = [
-  { href: "/about", label: "About" },
-  { href: "/work", label: "Work" },
+const NAV_LINKS = [
+  { href: "/about",    label: "About"    },
+  { href: "/work",     label: "Work"     },
   { href: "/projects", label: "Projects" },
   { href: "/research", label: "Research" },
-  { href: "/contact", label: "Contact" },
+  { href: "/contact",  label: "Contact"  },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [hoveredHref, setHoveredHref] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", h, { passive: true });
-    return () => window.removeEventListener("scroll", h);
-  }, []);
+  // Scroll detection
+  if (typeof window !== "undefined") {
+    // handled via useEffect below
+  }
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
+  const isActive = (href: string) =>
+    pathname === href || (pathname.startsWith(href + "/") && href !== "/");
+
+  // The "active" pill source: hover wins, else current route
+  const pillSource = hoveredHref ?? NAV_LINKS.find((l) => isActive(l.href))?.href ?? null;
 
   return (
     <>
-      <motion.header
-        initial={{ y: -16, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.55, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+      <header
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           right: 0,
           zIndex: 1000,
-          padding: "0.9rem 0",
-          background: scrolled ? "rgba(248,247,244,0.88)" : "transparent",
-          backdropFilter: scrolled ? "blur(14px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(227,226,219,0.7)" : "1px solid transparent",
-          transition: "background 0.3s, backdrop-filter 0.3s, border-color 0.3s",
+          padding: "0.75rem 0",
+          background: "rgba(248,247,243,0.85)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(221,219,211,0.6)",
         }}
       >
-        <div className="wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          {/* Logo */}
+        <div
+          className="wrap"
+          style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
+        >
+          {/* Wordmark */}
           <Link
             href="/"
             style={{
               fontFamily: "var(--font-serif)",
-              fontSize: "1.05rem",
+              fontSize: "1.1rem",
               fontWeight: 500,
               color: "var(--text)",
               textDecoration: "none",
-              letterSpacing: "-0.01em",
+              letterSpacing: "-0.02em",
             }}
           >
             Kritik Jain
           </Link>
 
-          {/* Desktop nav */}
+          {/* Desktop navigation */}
           <nav
-            aria-label="Primary"
-            style={{ display: "flex", alignItems: "center", gap: "0.15rem" }}
+            aria-label="Primary navigation"
+            style={{ display: "flex", alignItems: "center", gap: "0.1rem" }}
             className="nav-desktop"
+            onMouseLeave={() => setHoveredHref(null)}
           >
-            {navLinks.map((link) => {
-              const active = pathname === link.href || pathname.startsWith(link.href + "/");
+            {NAV_LINKS.map((link) => {
+              const active = isActive(link.href);
+              const showPill = pillSource === link.href;
+
               return (
                 <Link
                   key={link.href}
                   href={link.href}
+                  onMouseEnter={() => setHoveredHref(link.href)}
                   style={{
-                    padding: "0.4rem 0.8rem",
+                    position: "relative",
+                    padding: "0.4rem 0.85rem",
                     fontFamily: "var(--font-sans)",
-                    fontSize: "0.84rem",
-                    fontWeight: active ? 600 : 500,
-                    color: active ? "var(--text)" : "var(--text-2)",
+                    fontSize: "0.85rem",
+                    fontWeight: active && !hoveredHref ? 600 : 500,
+                    color: showPill ? "var(--text)" : "var(--text-2)",
                     textDecoration: "none",
                     borderRadius: "var(--r-md)",
-                    background: active ? "var(--surface)" : "transparent",
-                    transition: "background 0.18s, color 0.18s",
-                    position: "relative",
+                    transition: "color 0.15s",
+                    display: "inline-block",
                   }}
                 >
-                  {link.label}
+                  {/* The sliding pill — ONE element across all links via layoutId */}
+                  {showPill && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "var(--surface)",
+                        borderRadius: "var(--r-md)",
+                        zIndex: -1,
+                        border: "1px solid var(--border)",
+                      }}
+                      transition={{ type: "spring", bounce: 0.12, duration: 0.42 }}
+                    />
+                  )}
+                  <span style={{ position: "relative", zIndex: 1 }}>{link.label}</span>
                 </Link>
               );
             })}
+
             <div
-              style={{ width: 1, height: 18, background: "var(--border)", margin: "0 0.4rem" }}
-              aria-hidden="true"
+              style={{ width: 1, height: 18, background: "var(--border)", margin: "0 0.5rem" }}
+              aria-hidden
             />
+
             <a
               href="https://github.com/kritik8"
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                padding: "0.4rem 0.9rem",
+                padding: "0.42rem 1rem",
                 fontFamily: "var(--font-sans)",
-                fontSize: "0.84rem",
-                fontWeight: 500,
+                fontSize: "0.85rem",
+                fontWeight: 600,
                 color: "var(--bg)",
                 background: "var(--text)",
                 borderRadius: "var(--r-md)",
                 textDecoration: "none",
-                transition: "opacity 0.18s",
+                letterSpacing: "-0.01em",
+                transition: "opacity 0.15s",
               }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.82")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
             >
               GitHub ↗
             </a>
@@ -126,49 +152,51 @@ export default function Navbar() {
               background: "none",
               border: "1px solid var(--border)",
               borderRadius: "var(--r-md)",
-              padding: "0.38rem 0.55rem",
+              padding: "0.4rem 0.6rem",
               cursor: "pointer",
               color: "var(--text)",
-              fontSize: "1rem",
+              fontSize: "1.1rem",
               lineHeight: 1,
             }}
           >
             {mobileOpen ? "✕" : "≡"}
           </button>
         </div>
-      </motion.header>
+      </header>
 
-      {/* Mobile menu */}
+      {/* Mobile drawer */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -8, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.98 }}
-            transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+          <motion.nav
+            key="mobile-nav"
+            initial={{ opacity: 0, scale: 0.97, y: -6 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.97, y: -6 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            aria-label="Mobile navigation"
             style={{
               position: "fixed",
-              top: "4rem",
+              top: "3.8rem",
               left: "1rem",
               right: "1rem",
               zIndex: 999,
               background: "var(--bg-card)",
               border: "1px solid var(--border)",
-              borderRadius: "var(--r-lg)",
-              padding: "0.6rem",
+              borderRadius: "var(--r-xl)",
+              padding: "0.75rem",
               boxShadow: "var(--sh-lg)",
             }}
-            aria-label="Mobile navigation"
           >
-            {navLinks.map((link) => {
-              const active = pathname === link.href || pathname.startsWith(link.href + "/");
+            {NAV_LINKS.map((link) => {
+              const active = isActive(link.href);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
+                  onClick={() => setMobileOpen(false)}
                   style={{
                     display: "block",
-                    padding: "0.75rem 0.9rem",
+                    padding: "0.8rem 1rem",
                     fontFamily: "var(--font-sans)",
                     fontSize: "0.95rem",
                     fontWeight: active ? 600 : 500,
@@ -183,17 +211,17 @@ export default function Navbar() {
                 </Link>
               );
             })}
-            <div style={{ margin: "0.4rem 0", height: 1, background: "var(--border)" }} />
+            <div style={{ height: 1, background: "var(--border)", margin: "0.5rem 0" }} />
             <a
               href="https://github.com/kritik8"
               target="_blank"
               rel="noopener noreferrer"
               style={{
                 display: "block",
-                padding: "0.75rem 0.9rem",
+                padding: "0.8rem 1rem",
                 fontFamily: "var(--font-sans)",
                 fontSize: "0.95rem",
-                fontWeight: 500,
+                fontWeight: 600,
                 color: "var(--bg)",
                 background: "var(--text)",
                 borderRadius: "var(--r-md)",
@@ -203,15 +231,15 @@ export default function Navbar() {
             >
               GitHub ↗
             </a>
-          </motion.div>
+          </motion.nav>
         )}
       </AnimatePresence>
 
       <style>{`
-        .nav-desktop { display: flex; }
+        .nav-desktop  { display: flex; }
         .nav-mobile-btn { display: none; }
         @media (max-width: 768px) {
-          .nav-desktop { display: none !important; }
+          .nav-desktop    { display: none !important; }
           .nav-mobile-btn { display: block !important; }
         }
       `}</style>

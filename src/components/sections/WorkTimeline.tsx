@@ -2,184 +2,282 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { experiences } from "@/data/experience";
-import CareerMap from "@/components/ui/CareerMap";
-import { FadeUp } from "@/components/motion/FadeUp";
+import { experiences, locationMeta } from "@/data/experience";
+import IndiaMap from "@/components/ui/IndiaMap";
+
+type LocationKey = "delhi" | "kerala" | "bhopal";
+
+const YEAR_GROUPS = [
+  {
+    year: "2026",
+    ids: ["indiamart"],
+  },
+  {
+    year: "2025",
+    ids: ["qriocity"],
+  },
+  {
+    year: "2024",
+    ids: ["ieee", "ta", "gamerstag"],
+  },
+];
 
 export default function WorkTimeline() {
-  const [activeId, setActiveId] = useState<string>(experiences[0].id);
-  const [hoveredLoc, setHoveredLoc] = useState<"delhi" | "kerala" | "bhopal" | null>(null);
-
-  const activeExp = experiences.find((e) => e.id === activeId) || experiences[0];
-
-  // Derive active location key
-  const activeLocationKey = hoveredLoc || activeExp.locationKey;
+  const [activeId, setActiveId] = useState<string>("indiamart");
+  const activeExp = experiences.find((e) => e.id === activeId)!;
+  const activeLocKey = activeExp.locationKey as LocationKey | null;
+  const locMeta = activeLocKey ? locationMeta[activeLocKey] : null;
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "2.5rem" }} className="work-grid">
-      {/* Left: Interactive Timeline Cards */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-        {experiences.map((exp) => {
-          const isSelected = activeId === exp.id;
-          const accentColor =
-            exp.locationKey === "delhi"
-              ? "var(--delhi)"
-              : exp.locationKey === "kerala"
-              ? "var(--kerala)"
-              : exp.locationKey === "bhopal"
-              ? "var(--bhopal)"
-              : "var(--text)";
-
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: "3.5rem" }} className="timeline-grid">
+      {/* ── Left: Year-grouped Timeline ── */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+        {YEAR_GROUPS.map((group) => {
+          const groupExps = group.ids.map((id) => experiences.find((e) => e.id === id)!);
           return (
-            <motion.div
-              key={exp.id}
-              onClick={() => setActiveId(exp.id)}
-              style={{
-                padding: "1.25rem 1.5rem",
-                borderRadius: "var(--r-lg)",
-                border: "1px solid",
-                borderColor: isSelected ? accentColor : "var(--border)",
-                background: "var(--bg-card)",
-                cursor: "pointer",
-                position: "relative",
-                transition: "border-color 0.25s, box-shadow 0.25s",
-                boxShadow: isSelected ? "var(--sh-md)" : "none",
-              }}
-              whileHover={{ y: -2 }}
-            >
-              {/* Active accent vertical line */}
-              {isSelected && (
-                <motion.div
-                  layoutId="activeIndicator"
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    top: "15%",
-                    bottom: "15%",
-                    width: 3,
-                    borderRadius: "0 2px 2px 0",
-                    background: accentColor,
-                  }}
-                />
-              )}
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "0.5rem" }}>
-                <div>
-                  <h3
-                    style={{
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "1.05rem",
-                      fontWeight: 600,
-                      color: "var(--text)",
-                    }}
-                  >
-                    {exp.role}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-serif)",
-                      fontSize: "0.95rem",
-                      color: isSelected ? accentColor : "var(--text-2)",
-                      transition: "color 0.25s",
-                    }}
-                  >
-                    {exp.org}
-                  </p>
-                </div>
+            <div key={group.year}>
+              {/* Year marker */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  marginBottom: "0.85rem",
+                }}
+              >
                 <span
                   style={{
                     fontFamily: "var(--font-mono)",
-                    fontSize: "0.7rem",
+                    fontSize: "0.64rem",
+                    fontWeight: 700,
                     color: "var(--text-3)",
-                    whiteSpace: "nowrap",
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
                   }}
                 >
-                  {exp.duration}
+                  {group.year}
                 </span>
+                <div style={{ flex: 1, height: 1, background: "var(--border-subtle)" }} />
               </div>
 
-              <p
-                style={{
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "0.85rem",
-                  color: "var(--text-2)",
-                  lineHeight: 1.5,
-                }}
-              >
-                {exp.shortDesc}
-              </p>
+              {/* Experience cards in this year */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", paddingLeft: "1rem" }}>
+                {groupExps.map((exp) => {
+                  const isActive = activeId === exp.id;
+                  const expLocKey = exp.locationKey as LocationKey | null;
+                  const accentColor = expLocKey
+                    ? locationMeta[expLocKey].color
+                    : "var(--text-2)";
 
-              {/* Collapsed/Expanded detail */}
-              <AnimatePresence>
-                {isSelected && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    style={{ overflow: "hidden" }}
-                  >
-                    <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid var(--border-subtle)" }}>
+                  return (
+                    <motion.div
+                      key={exp.id}
+                      onClick={() => setActiveId(exp.id)}
+                      whileHover={{ x: 3 }}
+                      style={{
+                        position: "relative",
+                        paddingLeft: "1.25rem",
+                        paddingBlock: "0.85rem",
+                        paddingRight: "1rem",
+                        borderRadius: "var(--r-md)",
+                        border: "1px solid",
+                        borderColor: isActive ? accentColor + "44" : "transparent",
+                        background: isActive ? accentColor + "08" : "transparent",
+                        cursor: "pointer",
+                        transition: "border-color 0.25s, background 0.25s",
+                      }}
+                    >
+                      {/* Left accent stripe */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          top: "12%",
+                          bottom: "12%",
+                          width: 3,
+                          borderRadius: "0 2px 2px 0",
+                          background: accentColor,
+                          opacity: isActive ? 1 : 0.25,
+                          transition: "opacity 0.25s",
+                        }}
+                      />
+
+                      {/* Timeline dot connector */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          left: "-1.35rem",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          width: 7,
+                          height: 7,
+                          borderRadius: "50%",
+                          background: isActive ? accentColor : "var(--border)",
+                          border: "2px solid var(--bg)",
+                          transition: "background 0.25s",
+                        }}
+                      />
+
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <div>
+                          <h3
+                            style={{
+                              fontFamily: "var(--font-sans)",
+                              fontSize: "0.95rem",
+                              fontWeight: 600,
+                              color: "var(--text)",
+                              lineHeight: 1.3,
+                              marginBottom: "0.2rem",
+                            }}
+                          >
+                            {exp.role}
+                          </h3>
+                          <p
+                            style={{
+                              fontFamily: "var(--font-serif)",
+                              fontStyle: "italic",
+                              fontSize: "0.88rem",
+                              color: isActive ? accentColor : "var(--text-2)",
+                              transition: "color 0.25s",
+                            }}
+                          >
+                            {exp.org}
+                          </p>
+                        </div>
+                        <div style={{ textAlign: "right", flexShrink: 0, paddingLeft: "0.75rem" }}>
+                          <span
+                            style={{
+                              fontFamily: "var(--font-mono)",
+                              fontSize: "0.58rem",
+                              color: "var(--text-3)",
+                              display: "block",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {exp.duration}
+                          </span>
+                          {exp.location && (
+                            <span
+                              style={{
+                                fontFamily: "var(--font-mono)",
+                                fontSize: "0.55rem",
+                                color: accentColor,
+                                display: "block",
+                                marginTop: "0.15rem",
+                                letterSpacing: "0.04em",
+                              }}
+                            >
+                              📍 {exp.location}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Short desc */}
                       <p
                         style={{
                           fontFamily: "var(--font-sans)",
-                          fontSize: "0.88rem",
+                          fontSize: "0.82rem",
                           color: "var(--text-2)",
-                          lineHeight: 1.6,
-                          marginBottom: "1rem",
+                          lineHeight: 1.55,
+                          marginTop: "0.5rem",
                         }}
                       >
-                        {exp.fullDesc}
+                        {exp.shortDesc}
                       </p>
 
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
-                        {exp.tags.map((t) => (
-                          <span key={t} className="pill" style={{ fontSize: "0.62rem" }}>
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+                      {/* Tags (only when active) */}
+                      <AnimatePresence>
+                        {isActive && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            style={{ overflow: "hidden" }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: "0.3rem",
+                                marginTop: "0.75rem",
+                              }}
+                            >
+                              {exp.tags.map((t) => (
+                                <span
+                                  key={t}
+                                  className="pill"
+                                  style={{ fontSize: "0.6rem", borderColor: accentColor + "33" }}
+                                >
+                                  {t}
+                                </span>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
           );
         })}
       </div>
 
-      {/* Right: Map & Story context */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", position: "sticky", top: "6rem", height: "fit-content" }}>
-        <CareerMap activeLocation={activeLocationKey} onHoverLocation={setHoveredLoc} />
+      {/* ── Right: Sticky Map + Context ── */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1.5rem",
+          position: "sticky",
+          top: "5.5rem",
+          height: "fit-content",
+          alignSelf: "flex-start",
+        }}
+      >
+        <IndiaMap
+          activeLocation={activeLocKey}
+          onCityClick={(loc) => {
+            const firstMatch = experiences.find((e) => e.locationKey === loc);
+            if (firstMatch) setActiveId(firstMatch.id);
+          }}
+        />
 
-        {/* Dynamic Context Card */}
+        {/* Dynamic context card */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeExp.id}
-            initial={{ opacity: 0, y: 10 }}
+            key={activeId}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22 }}
             style={{
               padding: "1.5rem",
               borderRadius: "var(--r-lg)",
+              border: "1px solid",
+              borderColor: locMeta ? locMeta.color + "33" : "var(--border)",
               background: "var(--bg-card)",
-              border: "1px solid var(--border)",
               boxShadow: "var(--sh-sm)",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "0.85rem", marginBottom: "1rem" }}
+            >
               <div
                 style={{
-                  width: "44px",
-                  height: "44px",
+                  width: 44,
+                  height: 44,
                   borderRadius: "var(--r-md)",
-                  border: "1px solid var(--border)",
                   background: "#fff",
+                  border: "1px solid var(--border)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   padding: "6px",
+                  flexShrink: 0,
                   overflow: "hidden",
                 }}
               >
@@ -192,47 +290,51 @@ export default function WorkTimeline() {
                 />
               </div>
               <div>
-                <h4 style={{ fontFamily: "var(--font-sans)", fontSize: "0.95rem", fontWeight: 600 }}>
+                <h4
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.92rem",
+                    fontWeight: 700,
+                    color: "var(--text)",
+                  }}
+                >
                   {activeExp.org}
                 </h4>
-                <p className="label" style={{ fontSize: "0.58rem" }}>
-                  {activeExp.location || "Remote / No Location"}
+                <p
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.6rem",
+                    color: locMeta ? locMeta.color : "var(--text-3)",
+                    letterSpacing: "0.06em",
+                    marginTop: "0.1rem",
+                  }}
+                >
+                  {activeExp.location || "Remote"}
                 </p>
               </div>
             </div>
 
-            {/* Custom Atmospheric Visual Anchor */}
-            {activeExp.locationKey && (
+            {/* Accent bar */}
+            {locMeta && (
               <div
                 style={{
-                  height: "6px",
-                  width: "100%",
-                  borderRadius: "3px",
+                  height: 3,
+                  borderRadius: 2,
+                  background: `linear-gradient(90deg, ${locMeta.color}, transparent)`,
                   marginBottom: "1rem",
-                  background:
-                    activeExp.locationKey === "delhi"
-                      ? "linear-gradient(90deg, var(--delhi), transparent)"
-                      : activeExp.locationKey === "kerala"
-                      ? "linear-gradient(90deg, var(--kerala), transparent)"
-                      : "linear-gradient(90deg, var(--bhopal), transparent)",
                 }}
               />
             )}
 
-            {/* Micro Context Elements */}
-            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", color: "var(--text-2)", lineHeight: 1.5 }}>
-              {activeExp.locationKey === "delhi" && (
-                <span>📍 Focussed on the Delhi NCR tech corridor. Deployed scalable AI microservices.</span>
-              )}
-              {activeExp.locationKey === "kerala" && (
-                <span>🌴 Built design systems from the coastal tech hub in Kochi, Kerala.</span>
-              )}
-              {activeExp.locationKey === "bhopal" && (
-                <span>🎓 Academic leadership & teaching at Indian Institute of Information Technology, Bhopal.</span>
-              )}
-              {!activeExp.locationKey && (
-                <span>💻 Remote contribution to automated engineering workflows & data validation.</span>
-              )}
+            <p
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.85rem",
+                color: "var(--text-2)",
+                lineHeight: 1.6,
+              }}
+            >
+              {activeExp.fullDesc}
             </p>
           </motion.div>
         </AnimatePresence>
@@ -240,11 +342,11 @@ export default function WorkTimeline() {
 
       <style>{`
         @media (max-width: 900px) {
-          .work-grid {
+          .timeline-grid {
             grid-template-columns: 1fr !important;
             gap: 2rem !important;
           }
-          .work-grid > div:last-child {
+          .timeline-grid > div:last-child {
             position: relative !important;
             top: 0 !important;
           }

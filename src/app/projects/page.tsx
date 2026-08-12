@@ -2,149 +2,169 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { projects } from "@/data/projects";
 import { FadeUp } from "@/components/motion/FadeUp";
+import { projects } from "@/data/projects";
 
 export default function ProjectsPage() {
   return (
-    <main className="wrap page-pad" style={{ marginTop: "4rem" }}>
+    <main className="wrap page-pad">
       <FadeUp>
-        <p className="label" style={{ marginBottom: "0.5rem" }}>Projects</p>
+        <p className="label" style={{ marginBottom: "0.65rem" }}>Selected Works</p>
         <h1
           className="serif"
           style={{
             fontSize: "clamp(2rem, 5vw, 3.5rem)",
             fontWeight: 500,
-            letterSpacing: "-0.03em",
+            letterSpacing: "-0.035em",
             color: "var(--text)",
-            lineHeight: 1.15,
-            marginBottom: "3rem",
+            lineHeight: 1.12,
+            marginBottom: "3.5rem",
           }}
         >
-          Selected Works & Systems
+          Things I&apos;ve built.
         </h1>
       </FadeUp>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+      {/* Projects in editorial stack */}
+      <div style={{ display: "flex", flexDirection: "column" }}>
         {projects.map((project, i) => (
-          <FadeUp key={project.id} delay={i * 0.1}>
+          <FadeUp key={project.id} delay={i * 0.08}>
             <Link
               href={`/projects/${project.id}`}
               style={{ textDecoration: "none", color: "inherit", display: "block" }}
             >
               <motion.div
-                whileHover={{ y: -6 }}
+                whileHover="hovered"
+                initial="rest"
                 style={{
-                  border: "1px solid var(--border)",
-                  borderRadius: "var(--r-xl)",
-                  background: "var(--bg-card)",
-                  overflow: "hidden",
-                  cursor: "pointer",
-                  boxShadow: "var(--sh-sm)",
-                  transition: "box-shadow 0.3s ease, border-color 0.3s ease",
                   display: "grid",
-                  gridTemplateColumns: "100px 1fr",
-                  gap: "2.5rem",
-                  padding: "2.5rem",
+                  gridTemplateColumns: "5rem 1fr auto",
+                  gap: "2rem",
+                  alignItems: "start",
+                  padding: "2.5rem 0",
+                  borderBottom: "1px solid var(--border-subtle)",
+                  cursor: "pointer",
+                  position: "relative",
                 }}
-                className="project-card-grid"
-                onMouseEnter={(e) => {
-                  (e.currentTarget).style.boxShadow = "var(--sh-lg)";
-                  (e.currentTarget).style.borderColor = project.accent;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget).style.boxShadow = "var(--sh-sm)";
-                  (e.currentTarget).style.borderColor = "var(--border)";
-                }}
+                className="project-row"
               >
-                {/* Accent number block */}
-                <div
-                  style={{
-                    height: "100px",
-                    width: "100px",
-                    borderRadius: "var(--r-lg)",
-                    background: `linear-gradient(135deg, ${project.accent}22, ${project.accent}05)`,
-                    border: `1px solid ${project.accent}33`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                {/* Number */}
+                <motion.div
+                  variants={{
+                    rest: { color: "var(--text-3)" },
+                    hovered: { color: project.accent },
                   }}
-                  className="project-number-box"
+                  transition={{ duration: 0.2 }}
+                  className="serif"
+                  style={{
+                    fontSize: "clamp(2rem, 4vw, 3rem)",
+                    fontWeight: 700,
+                    letterSpacing: "-0.04em",
+                    lineHeight: 1,
+                    fontFamily: "var(--font-serif)",
+                    paddingTop: "0.2rem",
+                    transition: "color 0.2s",
+                  }}
                 >
-                  <span
-                    className="serif"
-                    style={{
-                      fontSize: "2.5rem",
-                      fontWeight: 600,
-                      color: project.accent,
-                      letterSpacing: "-0.04em",
+                  {project.number}
+                </motion.div>
+
+                {/* Content */}
+                <div>
+                  <motion.div
+                    variants={{
+                      rest: { x: 0 },
+                      hovered: { x: 6 },
                     }}
+                    transition={{ type: "spring", bounce: 0.3, duration: 0.4 }}
                   >
-                    {project.number}
-                  </span>
+                    <p
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "0.6rem",
+                        fontWeight: 600,
+                        color: project.accent,
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      {project.subtitle}
+                    </p>
+                    <h2
+                      style={{
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "clamp(1.4rem, 3vw, 2rem)",
+                        fontWeight: 800,
+                        color: "var(--text)",
+                        letterSpacing: "-0.025em",
+                        lineHeight: 1.15,
+                        marginBottom: "0.6rem",
+                      }}
+                    >
+                      {project.title}
+                    </h2>
+                    <p
+                      style={{
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "0.95rem",
+                        fontStyle: "italic",
+                        color: "var(--text-2)",
+                        marginBottom: "1rem",
+                        maxWidth: "580px",
+                      }}
+                    >
+                      {project.hook}
+                    </p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem" }}>
+                      {project.tags.slice(0, 5).map((tag) => (
+                        <span
+                          key={tag}
+                          className="pill"
+                          style={{ fontSize: "0.6rem", borderColor: `${project.accent}33` }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
                 </div>
 
-                {/* Info */}
-                <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                  <p
-                    className="label"
-                    style={{
-                      color: project.accent,
-                      letterSpacing: "0.1em",
-                      fontSize: "0.62rem",
-                      marginBottom: "0.5rem",
-                    }}
-                  >
-                    {project.subtitle}
-                  </p>
-                  <h2
-                    style={{
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "clamp(1.4rem, 3vw, 1.8rem)",
-                      fontWeight: 700,
-                      color: "var(--text)",
-                      letterSpacing: "-0.02em",
-                      marginBottom: "0.75rem",
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {project.title}
-                  </h2>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "1rem",
-                      fontStyle: "italic",
-                      color: "var(--text-2)",
-                      marginBottom: "1.25rem",
-                      maxWidth: "600px",
-                    }}
-                  >
-                    {project.hook}
-                  </p>
+                {/* Arrow */}
+                <motion.div
+                  variants={{
+                    rest: { opacity: 0, x: -8 },
+                    hovered: { opacity: 1, x: 0 },
+                  }}
+                  transition={{ duration: 0.2 }}
+                  style={{
+                    fontSize: "1.5rem",
+                    color: project.accent,
+                    paddingTop: "0.5rem",
+                    flexShrink: 0,
+                  }}
+                >
+                  ↗
+                </motion.div>
 
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginBottom: "1.25rem" }}>
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="pill" style={{ borderColor: `${project.accent}33` }}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <span
-                    style={{
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "0.85rem",
-                      fontWeight: 600,
-                      color: project.accent,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.25rem",
-                    }}
-                  >
-                    Read case study &rarr;
-                  </span>
-                </div>
+                {/* Hover accent bar (left edge) */}
+                <motion.div
+                  variants={{
+                    rest: { scaleY: 0 },
+                    hovered: { scaleY: 1 },
+                  }}
+                  transition={{ duration: 0.2 }}
+                  style={{
+                    position: "absolute",
+                    left: "-1.5rem",
+                    top: 0,
+                    bottom: 0,
+                    width: 3,
+                    borderRadius: "2px",
+                    background: project.accent,
+                    transformOrigin: "top",
+                  }}
+                />
               </motion.div>
             </Link>
           </FadeUp>
@@ -152,19 +172,13 @@ export default function ProjectsPage() {
       </div>
 
       <style>{`
-        @media (max-width: 768px) {
-          .project-card-grid {
-            grid-template-columns: 1fr !important;
-            gap: 1.5rem !important;
-            padding: 1.5rem !important;
+        @media (max-width: 600px) {
+          .project-row {
+            grid-template-columns: 3.5rem 1fr !important;
+            gap: 1rem !important;
+            padding: 2rem 0 !important;
           }
-          .project-number-box {
-            width: 60px !important;
-            height: 60px !important;
-          }
-          .project-number-box span {
-            fontSize: 1.8rem !important;
-          }
+          .project-row > div:last-child { display: none !important; }
         }
       `}</style>
     </main>

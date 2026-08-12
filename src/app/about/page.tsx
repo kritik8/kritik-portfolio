@@ -1,134 +1,257 @@
 "use client";
 
 import { motion } from "motion/react";
+import { FadeUp } from "@/components/motion/FadeUp";
 import { achievements, stats } from "@/data/achievements";
 import { skillCategories } from "@/data/skills";
-import { FadeUp } from "@/components/motion/FadeUp";
+
+const CODING_PROFILES = [
+  {
+    platform: "CodeChef",
+    rating: "1810",
+    badge: "★★★★",
+    badgeLabel: "4 Star",
+    url: "https://www.codechef.com/users/kritikjain",
+  },
+  {
+    platform: "Codeforces",
+    rating: "1270",
+    badge: "PUPIL",
+    badgeLabel: "Pupil",
+    url: "https://codeforces.com/profile/kritikjain",
+  },
+  {
+    platform: "LeetCode",
+    rating: "1580",
+    badge: null,
+    badgeLabel: null,
+    url: "https://leetcode.com/kritikjain",
+  },
+];
+
+const RANK_SYMBOL: Record<string, string> = {
+  gold: "🥇",
+  silver: "🥈",
+  bronze: "🥉",
+  special: "✦",
+};
 
 export default function AboutPage() {
   return (
-    <main className="wrap page-pad" style={{ marginTop: "4rem" }}>
-      {/* Editorial layout: story left, stats right */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1.2fr 1fr",
-          gap: "3rem",
-          alignItems: "start",
-          marginBottom: "4rem",
-        }}
-        className="about-hero"
-      >
+    <main className="wrap page-pad">
+      {/* ── Header: large identity ── */}
+      <section style={{ marginBottom: "4rem" }}>
         <FadeUp>
-          <p className="label" style={{ marginBottom: "0.5rem" }}>
-            Biography
-          </p>
+          <p className="label" style={{ marginBottom: "1rem" }}>Biography</p>
           <h1
             className="serif"
             style={{
-              fontSize: "clamp(2rem, 5vw, 3.5rem)",
-              fontWeight: 500,
-              letterSpacing: "-0.03em",
+              fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
+              fontWeight: 700,
+              letterSpacing: "-0.045em",
+              lineHeight: 1.0,
               color: "var(--text)",
-              lineHeight: 1.15,
-              marginBottom: "1.5rem",
+              marginBottom: "2rem",
             }}
           >
-            I turn ideas into <br />
-            <em style={{ fontStyle: "italic", color: "var(--text-2)" }}>working systems.</em>
+            Kritik Jain
           </h1>
-          <p
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontSize: "1.05rem",
-              lineHeight: 1.7,
-              color: "var(--text-2)",
-              marginBottom: "1.25rem",
-            }}
-          >
-            Final-year B.Tech Information Technology student at Indian Institute of Information Technology, Bhopal. I
-            work at the intersection of backend engineering, AI pipelines, and systems research.
-          </p>
-          <p
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.95rem",
-              lineHeight: 1.65,
-              color: "var(--text-2)",
-            }}
-          >
-            I believe software should be built with absolute structural rigor. From optimizing semantic query latencies
-            in retrieval networks to implementing CAN bus anomaly filters, my goal is to design performance-driven
-            architectures that ship.
-          </p>
         </FadeUp>
 
-        {/* Quick info panel */}
-        <FadeUp delay={0.15}>
+        <FadeUp delay={0.08}>
           <div
-            style={{
-              background: "var(--bg-card)",
-              border: "1px solid var(--border)",
-              borderRadius: "var(--r-xl)",
-              padding: "2rem",
-              display: "flex",
-              flexDirection: "column",
-              gap: "1.25rem",
-              boxShadow: "var(--sh-sm)",
-            }}
+            style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: "3rem", alignItems: "start" }}
+            className="bio-grid"
           >
-            {[
-              { label: "Institution", val: "IIIT Bhopal" },
-              { label: "Degree", val: "B.Tech Information Technology" },
-              { label: "Academic CGPA", val: "9.64 / 10" },
-              { label: "Focus areas", val: "Distributed Backend · LLM Systems · Applied ML" },
-            ].map((s) => (
-              <div key={s.label}>
-                <p className="label" style={{ fontSize: "0.58rem", marginBottom: "0.15rem" }}>
-                  {s.label}
-                </p>
-                <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.92rem", fontWeight: 600, color: "var(--text)" }}>
-                  {s.val}
-                </p>
-              </div>
+            <p
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "1.05rem",
+                lineHeight: 1.7,
+                color: "var(--text-2)",
+                maxWidth: "520px",
+              }}
+            >
+              Final-year B.Tech Information Technology student at IIIT Bhopal. I work at the intersection of backend engineering, AI/LLM systems, applied machine learning, and research.
+            </p>
+
+            {/* Quick facts */}
+            <div
+              style={{
+                padding: "1.5rem",
+                borderRadius: "var(--r-lg)",
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+              }}
+            >
+              {[
+                { label: "Institution", value: "IIIT Bhopal" },
+                { label: "Degree", value: "B.Tech Information Technology" },
+                { label: "CGPA", value: "9.64 / 10" },
+                { label: "Focus", value: "Backend · AI/LLM · Applied ML" },
+              ].map((item) => (
+                <div key={item.label}>
+                  <p className="label" style={{ fontSize: "0.56rem", marginBottom: "0.15rem" }}>
+                    {item.label}
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.9rem",
+                      fontWeight: 600,
+                      color: "var(--text)",
+                    }}
+                  >
+                    {item.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </FadeUp>
+      </section>
+
+      <div
+        style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3.5rem" }}
+      />
+
+      {/* ── Coding Profiles ── */}
+      <section style={{ marginBottom: "3.5rem" }}>
+        <FadeUp>
+          <p className="label" style={{ marginBottom: "1.25rem" }}>Competitive Programming</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            {CODING_PROFILES.map((cp) => (
+              <a
+                key={cp.platform}
+                href={cp.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: "none", color: "inherit", display: "block" }}
+              >
+                <motion.div
+                  whileHover={{ x: 4 }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "1rem 1.5rem",
+                    borderRadius: "var(--r-md)",
+                    border: "1px solid var(--border-subtle)",
+                    background: "var(--bg-card)",
+                    gap: "1.5rem",
+                    cursor: "pointer",
+                    transition: "border-color 0.2s, background 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
+                    (e.currentTarget as HTMLElement).style.background = "var(--surface)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = "var(--border-subtle)";
+                    (e.currentTarget as HTMLElement).style.background = "var(--bg-card)";
+                  }}
+                >
+                  {/* Platform name */}
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "0.72rem",
+                      fontWeight: 700,
+                      color: "var(--text-3)",
+                      letterSpacing: "0.14em",
+                      width: "130px",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {cp.platform.toUpperCase()}
+                  </span>
+
+                  {/* Rating */}
+                  <span
+                    className="serif"
+                    style={{
+                      fontSize: "1.6rem",
+                      fontWeight: 700,
+                      color: "var(--text)",
+                      letterSpacing: "-0.03em",
+                      lineHeight: 1,
+                      flex: 1,
+                    }}
+                  >
+                    {cp.rating}
+                  </span>
+
+                  {/* Badge */}
+                  {cp.badge && (
+                    <span
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "0.68rem",
+                        fontWeight: 700,
+                        color: "var(--text)",
+                        letterSpacing: "0.08em",
+                        background: "var(--surface)",
+                        padding: "0.2rem 0.6rem",
+                        borderRadius: "var(--r-sm)",
+                        border: "1px solid var(--border)",
+                      }}
+                    >
+                      {cp.badge}
+                    </span>
+                  )}
+
+                  {/* Arrow */}
+                  <span
+                    style={{
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.8rem",
+                      color: "var(--text-3)",
+                      transition: "color 0.15s, transform 0.15s",
+                    }}
+                  >
+                    View ↗
+                  </span>
+                </motion.div>
+              </a>
             ))}
           </div>
         </FadeUp>
-      </div>
+      </section>
 
-      <div className="divider" style={{ marginBottom: "3.5rem" }} />
+      <div style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3.5rem" }} />
 
-      {/* Canonical Location: Amazon ML Summer School */}
-      <FadeUp>
-        <div style={{ marginBottom: "4rem" }}>
-          <p className="label" style={{ marginBottom: "1rem" }}>
-            Featured Learning Credential
-          </p>
+      {/* ── Amazon ML Summer School ── */}
+      <section style={{ marginBottom: "3.5rem" }}>
+        <FadeUp>
+          <p className="label" style={{ marginBottom: "1.25rem" }}>Featured Credential</p>
           <div
             style={{
-              background: "var(--bg-card)",
-              border: "1px solid var(--border)",
-              borderRadius: "var(--r-xl)",
-              padding: "2rem",
               display: "grid",
               gridTemplateColumns: "auto 1fr",
-              gap: "2rem",
+              gap: "1.5rem",
               alignItems: "center",
+              padding: "1.5rem",
+              borderRadius: "var(--r-lg)",
+              background: "var(--bg-card)",
+              border: "1px solid var(--border)",
               boxShadow: "var(--sh-sm)",
             }}
-            className="amazon-credential"
+            className="amazon-grid"
           >
             <div
               style={{
-                width: "64px",
-                height: "64px",
+                width: 56,
+                height: 56,
                 borderRadius: "var(--r-md)",
-                border: "1px solid var(--border)",
                 background: "#fff",
+                border: "1px solid var(--border)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 padding: "8px",
+                flexShrink: 0,
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -143,10 +266,10 @@ export default function AboutPage() {
               <h3
                 style={{
                   fontFamily: "var(--font-sans)",
-                  fontSize: "1.2rem",
+                  fontSize: "1.05rem",
                   fontWeight: 700,
                   color: "var(--text)",
-                  marginBottom: "0.35rem",
+                  marginBottom: "0.3rem",
                 }}
               >
                 Amazon ML Summer School
@@ -154,126 +277,152 @@ export default function AboutPage() {
               <p
                 style={{
                   fontFamily: "var(--font-sans)",
-                  fontSize: "0.9rem",
+                  fontSize: "0.88rem",
                   color: "var(--text-2)",
-                  lineHeight: 1.6,
-                  maxWidth: "700px",
+                  lineHeight: 1.55,
                 }}
               >
-                Selected for two consecutive annual cohorts (<strong>June – July 2025</strong> and{" "}
-                <strong>June – July 2026</strong>). Gained deep validation in advanced machine learning concepts, supervised/unsupervised algorithms, deep networks, and scalable deployment engineering patterns.
+                Selected for two consecutive annual cohorts —{" "}
+                <strong>June–July 2025</strong> and <strong>June–July 2026</strong>.
+                Intensive program covering advanced ML theory, deep learning, and scalable systems.
               </p>
             </div>
           </div>
-        </div>
-      </FadeUp>
+        </FadeUp>
+      </section>
 
-      <div className="divider" style={{ marginBottom: "3.5rem" }} />
+      <div style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3.5rem" }} />
 
-      {/* Achievements Wall */}
-      <FadeUp>
-        <div style={{ marginBottom: "4rem" }}>
-          <p className="label" style={{ marginBottom: "1rem" }}>
-            Achievements
-          </p>
+      {/* ── Achievements ── */}
+      <section style={{ marginBottom: "3.5rem" }}>
+        <FadeUp>
+          <p className="label" style={{ marginBottom: "1.5rem" }}>Achievements</p>
 
-          {/* Stats count */}
+          {/* Stats row */}
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(4, 1fr)",
+              background: "var(--bg-card)",
               border: "1px solid var(--border)",
               borderRadius: "var(--r-lg)",
-              background: "var(--bg-card)",
-              marginBottom: "2rem",
               overflow: "hidden",
+              marginBottom: "1.5rem",
             }}
-            className="stats-wall"
+            className="stats-row"
           >
             {stats.map((s, i) => (
               <div
                 key={s.label}
                 style={{
-                  padding: "1.5rem",
+                  padding: "1.25rem",
                   textAlign: "center",
                   borderRight: i < stats.length - 1 ? "1px solid var(--border)" : "none",
                 }}
               >
-                <p className="serif" style={{ fontSize: "1.8rem", fontWeight: 600, color: "var(--text)" }}>
+                <p
+                  className="serif"
+                  style={{ fontSize: "1.7rem", fontWeight: 700, color: "var(--text)", lineHeight: 1.1 }}
+                >
                   {s.value}
                 </p>
-                <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--text-2)", fontWeight: 500 }}>
+                <p
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.78rem",
+                    color: "var(--text-2)",
+                    fontWeight: 500,
+                    marginTop: "0.2rem",
+                  }}
+                >
                   {s.label}
                 </p>
-                <p className="label" style={{ fontSize: "0.55rem" }}>
+                <p className="label" style={{ fontSize: "0.52rem", marginTop: "0.1rem" }}>
                   {s.sublabel}
                 </p>
               </div>
             ))}
           </div>
 
-          {/* List of achievements */}
+          {/* Achievement list */}
           <div
-            style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem" }}
-            className="achievements-list"
+            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}
+            className="ach-grid"
           >
             {achievements.map((ach) => (
               <div
                 key={ach.id}
                 style={{
-                  padding: "1.25rem",
+                  padding: "1rem 1.2rem",
                   borderRadius: "var(--r-md)",
                   border: "1px solid var(--border-subtle)",
                   background: "var(--bg-card)",
+                  display: "flex",
+                  gap: "0.75rem",
+                  alignItems: "flex-start",
                 }}
               >
-                <h4 style={{ fontFamily: "var(--font-sans)", fontSize: "0.95rem", fontWeight: 600 }}>
-                  {ach.title}
-                </h4>
-                <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", color: "var(--text-2)", marginBottom: "0.25rem" }}>
-                  {ach.event}
-                </p>
-                <p className="label" style={{ fontSize: "0.58rem" }}>
-                  {ach.category}
-                </p>
+                <span style={{ fontSize: "0.95rem", marginTop: "0.05rem", flexShrink: 0 }}>
+                  {RANK_SYMBOL[ach.rank]}
+                </span>
+                <div>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.88rem",
+                      fontWeight: 600,
+                      color: "var(--text)",
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    {ach.title}
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.8rem",
+                      color: "var(--text-2)",
+                      marginTop: "0.1rem",
+                    }}
+                  >
+                    {ach.event}
+                  </p>
+                  <p className="label" style={{ fontSize: "0.54rem", marginTop: "0.2rem" }}>
+                    {ach.category}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
-        </div>
-      </FadeUp>
+        </FadeUp>
+      </section>
 
-      <div className="divider" style={{ marginBottom: "3.5rem" }} />
+      <div style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3.5rem" }} />
 
-      {/* Skills / Toolbox */}
-      <FadeUp>
-        <div style={{ marginBottom: "2rem" }}>
-          <p className="label" style={{ marginBottom: "1rem" }}>
-            Technical Toolbox
-          </p>
+      {/* ── Technical Toolbox ── */}
+      <section>
+        <FadeUp>
+          <p className="label" style={{ marginBottom: "1.25rem" }}>Technical Toolbox</p>
           <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "1rem",
-            }}
+            style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.75rem" }}
             className="skills-grid"
           >
             {skillCategories.map((cat) => (
               <div
                 key={cat.label}
                 style={{
-                  padding: "1.5rem",
-                  borderRadius: "var(--r-lg)",
+                  padding: "1.25rem",
+                  borderRadius: "var(--r-md)",
                   background: "var(--bg-card)",
-                  border: "1px solid var(--border)",
+                  border: "1px solid var(--border-subtle)",
                 }}
               >
-                <h3 className="label" style={{ marginBottom: "1rem", color: "var(--text)" }}>
+                <p className="label" style={{ marginBottom: "0.85rem", color: "var(--text-2)" }}>
                   {cat.label}
-                </h3>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem" }}>
                   {cat.skills.map((s) => (
-                    <span key={s} className="pill">
+                    <span key={s} className="pill" style={{ fontSize: "0.6rem" }}>
                       {s}
                     </span>
                   ))}
@@ -281,34 +430,20 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
-        </div>
-      </FadeUp>
+        </FadeUp>
+      </section>
 
       <style>{`
         @media (max-width: 900px) {
-          .about-hero {
-            grid-template-columns: 1fr !important;
-            gap: 2rem !important;
-          }
-          .skills-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .stats-wall {
-            grid-template-columns: 1fr 1fr !important;
-          }
-          .achievements-list {
-            grid-template-columns: 1fr !important;
-          }
+          .bio-grid      { grid-template-columns: 1fr !important; gap: 2rem !important; }
+          .skills-grid   { grid-template-columns: 1fr 1fr !important; }
+          .stats-row     { grid-template-columns: 1fr 1fr !important; }
         }
-        @media (max-width: 480px) {
-          .amazon-credential {
-            grid-template-columns: 1fr !important;
-            gap: 1rem !important;
-            justify-items: start;
-          }
-          .stats-wall {
-            grid-template-columns: 1fr !important;
-          }
+        @media (max-width: 600px) {
+          .skills-grid   { grid-template-columns: 1fr !important; }
+          .stats-row     { grid-template-columns: 1fr 1fr !important; }
+          .ach-grid      { grid-template-columns: 1fr !important; }
+          .amazon-grid   { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </main>

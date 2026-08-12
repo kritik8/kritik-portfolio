@@ -5,9 +5,9 @@ import WorkTimeline from "@/components/sections/WorkTimeline";
 
 export default function WorkPage() {
   return (
-    <main className="wrap page-pad" style={{ marginTop: "4rem" }}>
+    <main className="wrap page-pad">
       <FadeUp>
-        <p className="label" style={{ marginBottom: "0.5rem" }}>
+        <p className="label" style={{ marginBottom: "0.65rem" }}>
           Timeline
         </p>
         <h1
@@ -15,13 +15,15 @@ export default function WorkPage() {
           style={{
             fontSize: "clamp(2rem, 5vw, 3.5rem)",
             fontWeight: 500,
-            letterSpacing: "-0.03em",
+            letterSpacing: "-0.035em",
             color: "var(--text)",
-            lineHeight: 1.15,
-            marginBottom: "3rem",
+            lineHeight: 1.12,
+            marginBottom: "3.5rem",
+            maxWidth: "600px",
           }}
         >
-          Professional Footprint
+          Incredible places<br />
+          I&apos;ve worked at.
         </h1>
       </FadeUp>
 

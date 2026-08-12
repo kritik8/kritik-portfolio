@@ -1,124 +1,89 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
-import { convgruPaper, convgruMetrics, surveyPaper, surveyMeta } from "@/data/research";
 import { FadeUp } from "@/components/motion/FadeUp";
+import { convgruPaper, convgruMetrics, surveyPaper, surveyMeta } from "@/data/research";
+
+const PIPELINE_STAGES = [
+  { id: "input",    icon: "⤵",  label: "CAN Frame Input",      desc: "Raw Controller Area Network traffic at 500kbps" },
+  { id: "conv1",    icon: "▦",  label: "Conv1D Layer",          desc: "Local temporal feature extraction via 1D convolutions" },
+  { id: "bn",       icon: "⊟",  label: "Batch Normalization",   desc: "Stabilizes activations, accelerates convergence" },
+  { id: "pool",     icon: "⤓",  label: "Max Pooling",           desc: "Dimensionality reduction, dominant feature selection" },
+  { id: "conv2",    icon: "▦",  label: "Conv1D Layer II",        desc: "Second pass feature refinement at higher abstraction" },
+  { id: "gru",      icon: "↻",  label: "GRU Layer",             desc: "Temporal sequence modeling — detects attack signatures across time" },
+  { id: "dense",    icon: "◉",  label: "Dense → Sigmoid",       desc: "Binary classification: normal vs. attack probability" },
+];
 
 export default function ResearchPage() {
-  const [activeStage, setActiveStage] = useState<number>(0);
-
-  const currentPipelineStage = convgruMetrics.pipeline[activeStage];
+  const [activeStage, setActiveStage] = useState(0);
 
   return (
-    <main className="wrap page-pad" style={{ marginTop: "4rem" }}>
+    <main className="wrap page-pad">
       {/* Header */}
       <FadeUp>
-        <p className="label" style={{ marginBottom: "0.5rem" }}>Research & Analysis</p>
+        <p className="label" style={{ marginBottom: "0.65rem" }}>Research Archive</p>
         <h1
           className="serif"
           style={{
             fontSize: "clamp(2rem, 5vw, 3.5rem)",
             fontWeight: 500,
-            letterSpacing: "-0.03em",
+            letterSpacing: "-0.035em",
             color: "var(--text)",
-            lineHeight: 1.15,
-            marginBottom: "1.5rem",
+            lineHeight: 1.12,
+            marginBottom: "1rem",
           }}
         >
-          Research Archive
+          Two works. One domain.
         </h1>
         <p
           style={{
             fontFamily: "var(--font-sans)",
-            fontSize: "1.1rem",
+            fontSize: "1rem",
             color: "var(--text-2)",
-            maxWidth: "600px",
             lineHeight: 1.65,
-            marginBottom: "3rem",
+            maxWidth: "540px",
+            marginBottom: "3.5rem",
           }}
         >
-          Vehicular networks require lightweight, real-time security. This archive houses system designs,
-          empirical evaluations, and domain reviews in CAN Bus security.
+          Vehicular CAN Bus security — from systematic literature review to implemented neural architecture.
         </p>
       </FadeUp>
 
-      {/* Logical Methodology Narrative Flow */}
-      <FadeUp delay={0.1}>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "1rem",
-            background: "var(--bg-card)",
-            padding: "1.5rem",
-            borderRadius: "var(--r-lg)",
-            border: "1px solid var(--border)",
-            marginBottom: "3.5rem",
-            textAlign: "center",
-          }}
-          className="narrative-grid"
-        >
-          {[
-            { label: "1. REVIEW FIELD", desc: "Co-authored vehicular IDS survey summarizing 50+ papers" },
-            { label: "2. IDENTIFY DIRECTION", desc: "Pinpointed lightweight temporal edge models as the critical gap" },
-            { label: "3. IMPLEMENT CONVGRU", desc: "Designed Conv1D-BatchNorm-MaxPool-GRU neural pipeline" },
-            { label: "4. EVALUATE SYSTEM", desc: "Tested on Car-Hacking Dataset achieving 99.95% accuracy" },
-          ].map((n, i) => (
-            <div key={n.label} style={{ padding: "0.5rem" }}>
-              <p
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.68rem",
-                  fontWeight: 600,
-                  color: "var(--research)",
-                  letterSpacing: "0.08em",
-                  marginBottom: "0.25rem",
-                }}
-              >
-                {n.label}
-              </p>
-              <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--text-2)", lineHeight: 1.4 }}>
-                {n.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-      </FadeUp>
-
-      {/* Research Work 01: ConvGRU-IDS Interactive Deep Dive */}
-      <FadeUp delay={0.2}>
+      {/* ── Research 01: ConvGRU-IDS ── */}
+      <FadeUp delay={0.08}>
         <div style={{ marginBottom: "4rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
+          <div
+            style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}
+          >
             <span
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: "0.65rem",
-                fontWeight: 600,
+                fontSize: "0.6rem",
+                fontWeight: 700,
                 color: "#fff",
-                background: "var(--research)",
-                padding: "0.2rem 0.6rem",
+                background: "var(--violet)",
+                padding: "0.2rem 0.65rem",
                 borderRadius: "100px",
-                textTransform: "uppercase",
+                letterSpacing: "0.08em",
               }}
             >
-              Implemented Study
+              01 / Implemented Paper
             </span>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "var(--text-3)" }}>
-              {convgruPaper.institution}
-            </span>
+            <span className="label">{convgruPaper.institution}</span>
           </div>
 
           <h2
             className="serif"
             style={{
-              fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
+              fontSize: "clamp(1.5rem, 3vw, 2.1rem)",
               fontWeight: 500,
               color: "var(--text)",
               letterSpacing: "-0.02em",
               lineHeight: 1.25,
-              marginBottom: "1.5rem",
-              maxWidth: "850px",
+              marginBottom: "0.75rem",
+              maxWidth: "800px",
             }}
           >
             {convgruPaper.title}
@@ -127,224 +92,265 @@ export default function ResearchPage() {
           <p
             style={{
               fontFamily: "var(--font-sans)",
-              fontSize: "0.95rem",
+              fontSize: "0.9rem",
               color: "var(--text-2)",
-              lineHeight: 1.7,
-              marginBottom: "2.5rem",
-              maxWidth: "750px",
+              lineHeight: 1.65,
+              marginBottom: "2rem",
+              maxWidth: "680px",
             }}
           >
-            <strong>Abstract:</strong> {convgruPaper.abstract}
+            {convgruPaper.abstract}
           </p>
 
-          {/* Interactive Technical Pipeline Visualization */}
+          {/* Interactive pipeline */}
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1.2fr",
-              gap: "2.5rem",
+              gridTemplateColumns: "1fr 1.15fr",
+              gap: "1.5rem",
               border: "1px solid var(--border)",
               borderRadius: "var(--r-xl)",
               background: "var(--bg-card)",
-              padding: "2.5rem",
+              padding: "2rem",
               overflow: "hidden",
             }}
-            className="viz-grid"
+            className="pipeline-grid"
           >
-            {/* Left: Interactive pipeline tracker */}
+            {/* Pipeline steps */}
             <div>
-              <p className="label" style={{ marginBottom: "1.25rem" }}>
-                Interactive Model Pipeline (Hover or Click)
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                {convgruMetrics.pipeline.map((stage, i) => {
+              <p className="label" style={{ marginBottom: "1rem" }}>Model Architecture</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+                {PIPELINE_STAGES.map((stage, i) => {
                   const isActive = activeStage === i;
                   return (
-                    <div
+                    <motion.div
                       key={stage.id}
-                      onMouseEnter={() => setActiveStage(i)}
+                      onHoverStart={() => setActiveStage(i)}
                       onClick={() => setActiveStage(i)}
+                      whileHover={{ x: 4 }}
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "1rem",
-                        padding: "0.75rem 1rem",
+                        gap: "0.85rem",
+                        padding: "0.65rem 0.9rem",
                         borderRadius: "var(--r-md)",
                         border: "1px solid",
-                        borderColor: isActive ? "var(--research)" : "transparent",
-                        background: isActive ? "var(--bg)" : "transparent",
+                        borderColor: isActive ? "var(--violet)55" : "transparent",
+                        background: isActive ? "var(--violet-bg)" : "transparent",
                         cursor: "pointer",
-                        transition: "all 0.2s ease",
+                        transition: "border-color 0.2s, background 0.2s",
+                        position: "relative",
                       }}
                     >
+                      {/* Connecting vertical line for non-last items */}
+                      {i < PIPELINE_STAGES.length - 1 && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            left: "calc(0.9rem + 0.6rem)",
+                            top: "100%",
+                            width: 1,
+                            height: "0.35rem",
+                            background: "var(--border)",
+                          }}
+                        />
+                      )}
                       <span
                         style={{
-                          fontSize: "1.1rem",
-                          color: isActive ? "var(--research)" : "var(--text-3)",
+                          fontFamily: "var(--font-mono)",
+                          fontSize: "0.95rem",
+                          color: isActive ? "var(--violet)" : "var(--text-3)",
+                          width: "1.2rem",
+                          textAlign: "center",
+                          transition: "color 0.2s",
                         }}
                       >
                         {stage.icon}
                       </span>
-                      <div>
-                        <h4
+                      <div style={{ flex: 1 }}>
+                        <p
                           style={{
                             fontFamily: "var(--font-sans)",
-                            fontSize: "0.85rem",
+                            fontSize: "0.82rem",
                             fontWeight: isActive ? 600 : 500,
                             color: isActive ? "var(--text)" : "var(--text-2)",
+                            transition: "color 0.2s, font-weight 0.2s",
                           }}
                         >
                           {stage.label}
-                        </h4>
-                        <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.68rem", color: "var(--text-3)" }}>
-                          {stage.sublabel}
                         </p>
                       </div>
-                    </div>
+                      {isActive && (
+                        <motion.div
+                          layoutId="pipeline-indicator"
+                          style={{
+                            width: 3,
+                            height: "100%",
+                            background: "var(--violet)",
+                            borderRadius: 2,
+                            position: "absolute",
+                            left: 0,
+                            top: 0,
+                            bottom: 0,
+                          }}
+                          transition={{ type: "spring", bounce: 0.2, duration: 0.3 }}
+                        />
+                      )}
+                    </motion.div>
                   );
                 })}
               </div>
             </div>
 
-            {/* Right: Technical view context & evaluation dashboard */}
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "2rem" }}>
-              <div
-                style={{
-                  padding: "1.5rem",
-                  borderRadius: "var(--r-lg)",
-                  background: "var(--bg)",
-                  border: "1px solid var(--border)",
-                  minHeight: "130px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentPipelineStage.id}
-                    initial={{ opacity: 0, x: 8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -8 }}
-                    transition={{ duration: 0.18 }}
-                  >
-                    <p className="label" style={{ color: "var(--research)", marginBottom: "0.4rem" }}>
-                      Pipeline Component
-                    </p>
-                    <h3 style={{ fontFamily: "var(--font-sans)", fontSize: "1.1rem", fontWeight: 700, marginBottom: "0.25rem" }}>
-                      {currentPipelineStage.label}
-                    </h3>
-                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", color: "var(--text-2)", lineHeight: 1.5 }}>
-                      Component runs lightweight inference processing for CAN frames. Part of the real-time classification layer.
-                    </p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              {/* Evaluation statistics panel */}
-              <div>
-                <p className="label" style={{ marginBottom: "1rem" }}>
-                  Empirical Evaluation Stage
-                </p>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.75rem", marginBottom: "1.5rem" }}>
-                  {[
-                    { label: "Accuracy", val: "99.95%" },
-                    { label: "Precision", val: "99.976%" },
-                    { label: "Recall", val: "99.924%" },
-                  ].map((s) => (
-                    <div
-                      key={s.label}
-                      style={{
-                        padding: "0.85rem",
-                        borderRadius: "var(--r-md)",
-                        background: "var(--bg)",
-                        border: "1px solid var(--border-subtle)",
-                        textAlign: "center",
-                      }}
-                    >
-                      <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "var(--text-3)", textTransform: "uppercase" }}>
-                        {s.label}
-                      </p>
-                      <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.15rem", fontWeight: 600, color: "var(--research)" }}>
-                        {s.val}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Baselines comparison */}
-                <div
+            {/* Stage detail + metrics */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeStage}
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.18 }}
                   style={{
-                    border: "1px solid var(--border)",
-                    borderRadius: "var(--r-lg)",
-                    padding: "1rem",
-                    background: "var(--bg)",
+                    padding: "1.25rem",
+                    borderRadius: "var(--r-md)",
+                    background: "var(--surface)",
+                    border: "1px solid var(--border-subtle)",
+                    flex: 1,
                   }}
                 >
-                  <p className="label" style={{ fontSize: "0.58rem", marginBottom: "0.6rem" }}>
-                    Baseline Comparison (Car-Hacking Dataset)
+                  <p className="label" style={{ color: "var(--violet)", marginBottom: "0.5rem" }}>
+                    {PIPELINE_STAGES[activeStage].label}
                   </p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-                    {convgruMetrics.baselines.map((b) => (
-                      <div
-                        key={b.name}
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          fontSize: "0.8rem",
-                          fontFamily: "var(--font-sans)",
-                          fontWeight: b.highlight ? 600 : 400,
-                          color: b.highlight ? "var(--research)" : "var(--text-2)",
-                        }}
-                      >
-                        <span>{b.name}</span>
-                        <span>{b.accuracy}% Accuracy</span>
-                      </div>
-                    ))}
+                  <p
+                    style={{
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.88rem",
+                      color: "var(--text-2)",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {PIPELINE_STAGES[activeStage].desc}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Metrics */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "0.5rem",
+                }}
+              >
+                {[
+                  { k: "Accuracy",  v: "99.95%" },
+                  { k: "Precision", v: "99.976%" },
+                  { k: "Recall",    v: "99.924%" },
+                  { k: "F1 Score",  v: "99.95%" },
+                  { k: "ROC-AUC",   v: "1.0000" },
+                ].map((m) => (
+                  <div
+                    key={m.k}
+                    style={{
+                      padding: "0.7rem",
+                      borderRadius: "var(--r-sm)",
+                      background: "var(--surface)",
+                      border: "1px solid var(--border-subtle)",
+                      textAlign: "center",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "0.88rem",
+                        fontWeight: 700,
+                        color: "var(--violet)",
+                        lineHeight: 1.1,
+                      }}
+                    >
+                      {m.v}
+                    </p>
+                    <p className="label" style={{ fontSize: "0.5rem", marginTop: "0.2rem" }}>
+                      {m.k}
+                    </p>
                   </div>
-                </div>
+                ))}
+              </div>
+
+              {/* Baseline comparison */}
+              <div
+                style={{
+                  padding: "1rem",
+                  borderRadius: "var(--r-md)",
+                  background: "var(--surface)",
+                  border: "1px solid var(--border-subtle)",
+                }}
+              >
+                <p className="label" style={{ marginBottom: "0.65rem", fontSize: "0.56rem" }}>
+                  Baseline Comparison
+                </p>
+                {convgruMetrics.baselines.map((b) => (
+                  <div
+                    key={b.name}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.8rem",
+                      color: b.highlight ? "var(--violet)" : "var(--text-2)",
+                      fontWeight: b.highlight ? 700 : 400,
+                      paddingBlock: "0.2rem",
+                    }}
+                  >
+                    <span>{b.name}</span>
+                    <span>{b.accuracy}%</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </FadeUp>
 
-      <div className="divider" style={{ marginBlock: "3.5rem" }} />
+      <div style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3.5rem" }} />
 
-      {/* Research Work 02: Literature Review Index */}
-      <FadeUp delay={0.3}>
+      {/* ── Research 02: Survey ── */}
+      <FadeUp delay={0.1}>
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
+          <div
+            style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}
+          >
             <span
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: "0.65rem",
-                fontWeight: 600,
+                fontSize: "0.6rem",
+                fontWeight: 700,
                 color: "var(--text-2)",
+                background: "var(--surface)",
                 border: "1px solid var(--border)",
-                background: "var(--bg-card)",
-                padding: "0.2rem 0.6rem",
+                padding: "0.2rem 0.65rem",
                 borderRadius: "100px",
-                textTransform: "uppercase",
+                letterSpacing: "0.08em",
               }}
             >
-              Literature Survey
+              02 / Literature Survey
             </span>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "var(--text-3)" }}>
-              {surveyMeta.pages} pages · {surveyMeta.papersReviewed}+ papers reviewed
+            <span className="label">
+              {surveyMeta.pages} pages · {surveyMeta.papersReviewed}+ sources
             </span>
           </div>
 
           <h2
             className="serif"
             style={{
-              fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
+              fontSize: "clamp(1.5rem, 3vw, 2.1rem)",
               fontWeight: 500,
               color: "var(--text)",
               letterSpacing: "-0.02em",
               lineHeight: 1.25,
-              marginBottom: "1.5rem",
-              maxWidth: "850px",
+              marginBottom: "0.75rem",
+              maxWidth: "800px",
             }}
           >
             {surveyPaper.title}
@@ -353,45 +359,54 @@ export default function ResearchPage() {
           <p
             style={{
               fontFamily: "var(--font-sans)",
-              fontSize: "0.95rem",
+              fontSize: "0.9rem",
               color: "var(--text-2)",
-              lineHeight: 1.7,
+              lineHeight: 1.65,
+              maxWidth: "680px",
               marginBottom: "2rem",
-              maxWidth: "750px",
             }}
           >
-            <strong>Abstract:</strong> {surveyPaper.abstract}
+            {surveyPaper.abstract}
           </p>
 
-          {/* Survey Network index / thematic panels */}
           <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "1rem",
-            }}
-            className="survey-grid"
+            style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.75rem" }}
+            className="survey-cards"
           >
             {[
-              { title: "CAN Bus Security", desc: "Analyzed signal levels, data patterns, and vulnerabilities of controller area networks." },
-              { title: "Federated Learning", desc: "Reviewed privacy-preserving distributed IDS models for decentralized vehicular fleets." },
-              { title: "Real-time Edge AI", desc: "Evaluated latency, compute limits, and parameter sizing for vehicle deployment." },
-            ].map((t) => (
+              { title: "CAN Bus Security",  desc: "Signal vulnerabilities, replay attacks, injection vectors in controller area networks." },
+              { title: "Federated & Privacy-aware IDS", desc: "Distributed model training for privacy-preserving intrusion detection in vehicular fleets." },
+              { title: "Edge Deployment Constraints", desc: "Real-time latency, compute limits, and quantization for on-vehicle inference." },
+            ].map((card) => (
               <div
-                key={t.title}
+                key={card.title}
                 style={{
-                  padding: "1.5rem",
+                  padding: "1.25rem",
                   borderRadius: "var(--r-lg)",
                   background: "var(--bg-card)",
-                  border: "1px solid var(--border)",
-                  boxShadow: "var(--sh-sm)",
+                  border: "1px solid var(--border-subtle)",
                 }}
               >
-                <h4 style={{ fontFamily: "var(--font-sans)", fontSize: "1rem", fontWeight: 600, marginBottom: "0.5rem" }}>
-                  {t.title}
-                </h4>
-                <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", color: "var(--text-2)", lineHeight: 1.5 }}>
-                  {t.desc}
+                <h3
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.92rem",
+                    fontWeight: 600,
+                    color: "var(--text)",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  {card.title}
+                </h3>
+                <p
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.82rem",
+                    color: "var(--text-2)",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {card.desc}
                 </p>
               </div>
             ))}
@@ -401,17 +416,8 @@ export default function ResearchPage() {
 
       <style>{`
         @media (max-width: 900px) {
-          .viz-grid {
-            grid-template-columns: 1fr !important;
-            gap: 2rem !important;
-            padding: 1.5rem !important;
-          }
-          .survey-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .narrative-grid {
-            grid-template-columns: 1fr 1fr !important;
-          }
+          .pipeline-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+          .survey-cards  { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </main>

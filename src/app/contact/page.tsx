@@ -4,9 +4,17 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { FadeUp } from "@/components/motion/FadeUp";
 
+const LINKS = [
+  { label: "GitHub",      href: "https://github.com/kritik8",              arrow: "↗" },
+  { label: "LinkedIn",    href: "https://linkedin.com/in/kritikjain",      arrow: "↗" },
+  { label: "CodeChef",    href: "https://www.codechef.com/users/kritikjain", arrow: "↗" },
+  { label: "Codeforces",  href: "https://codeforces.com/profile/kritikjain", arrow: "↗" },
+  { label: "LeetCode",    href: "https://leetcode.com/kritikjain",         arrow: "↗" },
+];
+
 export default function ContactPage() {
-  const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,7 +23,7 @@ export default function ContactPage() {
 
   const inputStyle: React.CSSProperties = {
     width: "100%",
-    padding: "0.85rem 1rem",
+    padding: "0.8rem 1rem",
     border: "1px solid var(--border)",
     borderRadius: "var(--r-md)",
     background: "var(--bg-card)",
@@ -23,222 +31,248 @@ export default function ContactPage() {
     fontSize: "0.9rem",
     color: "var(--text)",
     outline: "none",
-    transition: "border-color 0.2s ease",
+    transition: "border-color 0.2s",
     appearance: "none",
   };
 
   return (
-    <main className="wrap page-pad" style={{ marginTop: "4rem" }}>
+    <main className="wrap page-pad">
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "1.2fr 1fr",
-          gap: "4rem",
+          gap: "5rem",
           alignItems: "start",
         }}
-        className="contact-layout"
+        className="contact-grid"
       >
-        {/* Left column */}
-        <FadeUp>
-          <p className="label" style={{ marginBottom: "0.5rem" }}>
-            Reach Out
-          </p>
-          <h1
-            className="serif"
-            style={{
-              fontSize: "clamp(2rem, 5vw, 3.5rem)",
-              fontWeight: 500,
-              letterSpacing: "-0.03em",
-              color: "var(--text)",
-              lineHeight: 1.15,
-              marginBottom: "1.5rem",
-            }}
-          >
-            Let&apos;s build <br />
-            <em style={{ fontStyle: "italic", color: "var(--text-2)" }}>something.</em>
-          </h1>
-          <p
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontSize: "1.05rem",
-              lineHeight: 1.65,
-              color: "var(--text-2)",
-              marginBottom: "2rem",
-              maxWidth: "480px",
-            }}
-          >
-            Open to technical collaborations, performance research opportunities, and conversations at the frontier of systems engineering.
-          </p>
-
-          {sent ? (
-            <div
+        {/* Left: form */}
+        <div>
+          <FadeUp>
+            <p className="label" style={{ marginBottom: "0.65rem" }}>Contact</p>
+            <h1
+              className="serif"
               style={{
-                padding: "2rem",
-                border: "1px solid var(--border)",
-                borderRadius: "var(--r-lg)",
-                background: "var(--bg-card)",
-                textAlign: "center",
+                fontSize: "clamp(2rem, 5vw, 3.8rem)",
+                fontWeight: 500,
+                letterSpacing: "-0.04em",
+                color: "var(--text)",
+                lineHeight: 1.1,
+                marginBottom: "1.25rem",
               }}
             >
-              <h3 className="serif" style={{ fontSize: "1.25rem", color: "var(--text)", marginBottom: "0.5rem" }}>
-                Message transmitted.
-              </h3>
-              <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", color: "var(--text-2)" }}>
-                I will get back to you shortly.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <div>
-                <label className="label" style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.58rem" }}>
-                  Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Your name"
-                  style={inputStyle}
-                  value={formState.name}
-                  onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                />
-              </div>
+              Let&apos;s build<br />
+              <em style={{ color: "var(--text-2)" }}>something great.</em>
+            </h1>
+            <p
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "1rem",
+                color: "var(--text-2)",
+                lineHeight: 1.65,
+                marginBottom: "2.5rem",
+                maxWidth: "420px",
+              }}
+            >
+              Open to technical collaborations, research discussions, and engineering opportunities.
+            </p>
+          </FadeUp>
 
-              <div>
-                <label className="label" style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.58rem" }}>
-                  Email
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="your@email.com"
-                  style={inputStyle}
-                  value={formState.email}
-                  onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                />
-              </div>
-
-              <div>
-                <label className="label" style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.58rem" }}>
-                  Message
-                </label>
-                <textarea
-                  required
-                  rows={5}
-                  placeholder="Describe your project or proposal..."
-                  style={{ ...inputStyle, resize: "vertical" }}
-                  value={formState.message}
-                  onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                />
-              </div>
-
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.01 }}
+          <FadeUp delay={0.1}>
+            {sent ? (
+              <div
                 style={{
-                  padding: "0.85rem 1.5rem",
-                  background: "var(--text)",
-                  color: "var(--bg)",
-                  border: "none",
-                  borderRadius: "var(--r-md)",
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "0.88rem",
-                  fontWeight: 600,
-                  cursor: "pointer",
+                  padding: "2.5rem",
+                  borderRadius: "var(--r-xl)",
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--border)",
+                  textAlign: "center",
                 }}
               >
-                Send message &rarr;
-              </motion.button>
-            </form>
-          )}
-        </FadeUp>
+                <p className="serif" style={{ fontSize: "1.4rem", marginBottom: "0.5rem" }}>
+                  Message sent. ✓
+                </p>
+                <p
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.88rem",
+                    color: "var(--text-2)",
+                  }}
+                >
+                  I&apos;ll get back to you shortly.
+                </p>
+              </div>
+            ) : (
+              <form
+                onSubmit={handleSubmit}
+                style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}
+              >
+                <div>
+                  <label className="label" style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.56rem" }}>
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Your name"
+                    style={inputStyle}
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    onFocus={(e) => ((e.currentTarget as HTMLInputElement).style.borderColor = "var(--text)")}
+                    onBlur={(e) => ((e.currentTarget as HTMLInputElement).style.borderColor = "var(--border)")}
+                  />
+                </div>
+                <div>
+                  <label className="label" style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.56rem" }}>
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="your@email.com"
+                    style={inputStyle}
+                    value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    onFocus={(e) => ((e.currentTarget as HTMLInputElement).style.borderColor = "var(--text)")}
+                    onBlur={(e) => ((e.currentTarget as HTMLInputElement).style.borderColor = "var(--border)")}
+                  />
+                </div>
+                <div>
+                  <label className="label" style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.56rem" }}>
+                    Message
+                  </label>
+                  <textarea
+                    required
+                    rows={5}
+                    placeholder="What are you working on?"
+                    style={{ ...inputStyle, resize: "vertical" }}
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    onFocus={(e) => ((e.currentTarget as HTMLTextAreaElement).style.borderColor = "var(--text)")}
+                    onBlur={(e) => ((e.currentTarget as HTMLTextAreaElement).style.borderColor = "var(--border)")}
+                  />
+                </div>
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.015 }}
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    padding: "0.85rem 1.5rem",
+                    background: "var(--text)",
+                    color: "var(--bg)",
+                    border: "none",
+                    borderRadius: "var(--r-md)",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.9rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  Send message →
+                </motion.button>
+              </form>
+            )}
+          </FadeUp>
+        </div>
 
-        {/* Right column */}
-        <FadeUp delay={0.15}>
-          <div
-            style={{
-              padding: "2rem",
-              borderRadius: "var(--r-xl)",
-              background: "var(--bg-card)",
-              border: "1px solid var(--border)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "2rem",
-            }}
-          >
+        {/* Right: links + location */}
+        <FadeUp delay={0.12}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             <div>
-              <p className="label" style={{ marginBottom: "0.75rem" }}>
-                Direct channels
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                {[
-                  { name: "GitHub", val: "github.com/kritik8", url: "https://github.com/kritik8" },
-                  { name: "LinkedIn", val: "linkedin.com/in/kritikjain", url: "https://linkedin.com/in/kritikjain" },
-                ].map((l) => (
+              <p className="label" style={{ marginBottom: "1rem" }}>Elsewhere</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                {LINKS.map((link) => (
                   <a
-                    key={l.name}
-                    href={l.url}
+                    key={link.label}
+                    href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      display: "block",
-                      padding: "1rem",
-                      borderRadius: "var(--r-md)",
-                      border: "1px solid var(--border-subtle)",
-                      background: "var(--bg)",
-                      textDecoration: "none",
-                      color: "inherit",
-                    }}
+                    style={{ textDecoration: "none" }}
                   >
-                    <p className="label" style={{ fontSize: "0.55rem", marginBottom: "0.15rem" }}>
-                      {l.name}
-                    </p>
-                    <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.82rem", fontWeight: 600 }}>
-                      {l.val} &nbsp;↗
-                    </p>
+                    <motion.div
+                      whileHover={{ x: 6 }}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "0.9rem 1rem",
+                        borderRadius: "var(--r-md)",
+                        border: "1px solid var(--border-subtle)",
+                        background: "var(--bg-card)",
+                        cursor: "pointer",
+                        transition: "border-color 0.2s, background 0.2s",
+                      }}
+                      onHoverStart={(e) => {
+                        const el = e.target as HTMLElement;
+                        if (el.closest(".link-row")) {
+                          (el.closest(".link-row") as HTMLElement).style.borderColor = "var(--border)";
+                        }
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "var(--font-sans)",
+                          fontSize: "0.9rem",
+                          fontWeight: 600,
+                          color: "var(--text)",
+                        }}
+                      >
+                        {link.label}
+                      </span>
+                      <span style={{ fontSize: "0.85rem", color: "var(--text-3)" }}>{link.arrow}</span>
+                    </motion.div>
                   </a>
                 ))}
               </div>
             </div>
 
-            <div className="divider" />
-
-            <div>
-              <p className="label" style={{ marginBottom: "0.5rem" }}>
-                Location Hub
-              </p>
-              <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.92rem", color: "var(--text-2)", lineHeight: 1.5 }}>
-                Bhopal, Madhya Pradesh, India.
+            <div
+              style={{
+                padding: "1.5rem",
+                borderRadius: "var(--r-lg)",
+                background: "var(--surface)",
+                border: "1px solid var(--border-subtle)",
+              }}
+            >
+              <p className="label" style={{ marginBottom: "0.5rem" }}>Currently based in</p>
+              <p
+                style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: "1.1rem",
+                  fontStyle: "italic",
+                  color: "var(--text)",
+                }}
+              >
+                Bhopal, Madhya Pradesh, India
               </p>
             </div>
           </div>
         </FadeUp>
       </div>
 
-      {/* Dynamic footer */}
+      {/* Footer */}
       <footer
         style={{
           marginTop: "6rem",
           paddingTop: "2rem",
-          borderTop: "1px solid var(--border)",
+          borderTop: "1px solid var(--border-subtle)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          flexWrap: "wrap",
+          gap: "0.5rem",
         }}
       >
-        <span className="serif" style={{ fontWeight: 500, fontSize: "0.95rem" }}>
-          Kritik Jain
-        </span>
-        <span className="label" style={{ fontSize: "0.55rem" }}>
-          © 2026 Kritik Jain · Next.js 16
+        <span className="serif" style={{ fontWeight: 500 }}>Kritik Jain</span>
+        <span className="label" style={{ fontSize: "0.52rem" }}>
+          © 2026 Kritik Jain · IIIT Bhopal · Built with Next.js
         </span>
       </footer>
 
       <style>{`
-        @media (max-width: 768px) {
-          .contact-layout {
-            grid-template-columns: 1fr !important;
-            gap: 2.5rem !important;
-          }
+        @media (max-width: 900px) {
+          .contact-grid { grid-template-columns: 1fr !important; gap: 3rem !important; }
         }
       `}</style>
     </main>
