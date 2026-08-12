@@ -97,7 +97,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           style={{
-            height: "clamp(2rem, 4vw, 3.5rem)",
+            height: "clamp(2.5rem, 5vw, 3.5rem)",
             display: "flex",
             alignItems: "center",
             marginBottom: "2rem",
