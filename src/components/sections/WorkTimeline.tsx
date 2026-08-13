@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { experiences, locationMeta } from "@/data/experience";
 import IndiaMap from "@/components/ui/IndiaMap";
 
-type LocationKey = "delhi" | "kerala" | "bhopal";
+type LocationKey = "delhi" | "kerala" | "bhopal" | "chennai";
 
 const YEAR_GROUPS = [
   {
@@ -14,7 +14,7 @@ const YEAR_GROUPS = [
   },
   {
     year: "2025",
-    ids: ["qriocity"],
+    ids: ["amazon-ml", "qriocity"],
   },
   {
     year: "2024",
@@ -29,7 +29,7 @@ export default function WorkTimeline() {
   const locMeta = activeLocKey ? locationMeta[activeLocKey] : null;
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: "3.5rem" }} className="timeline-grid">
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem" }} className="timeline-grid">
       {/* ── Left: Year-grouped Timeline ── */}
       <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
         {YEAR_GROUPS.map((group) => {
@@ -42,13 +42,13 @@ export default function WorkTimeline() {
                   display: "flex",
                   alignItems: "center",
                   gap: "0.75rem",
-                  marginBottom: "0.85rem",
+                  marginBottom: "0.75rem",
                 }}
               >
                 <span
                   style={{
                     fontFamily: "var(--font-mono)",
-                    fontSize: "0.64rem",
+                    fontSize: "0.62rem",
                     fontWeight: 700,
                     color: "var(--text-3)",
                     letterSpacing: "0.14em",
@@ -61,11 +61,13 @@ export default function WorkTimeline() {
               </div>
 
               {/* Experience cards in this year */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", paddingLeft: "1rem" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", paddingLeft: "1rem" }}>
                 {groupExps.map((exp) => {
                   const isActive = activeId === exp.id;
                   const expLocKey = exp.locationKey as LocationKey | null;
-                  const accentColor = expLocKey
+                  const accentColor = exp.isAward
+                    ? "var(--amber)"
+                    : expLocKey
                     ? locationMeta[expLocKey].color
                     : "var(--text-2)";
 
@@ -77,8 +79,8 @@ export default function WorkTimeline() {
                       style={{
                         position: "relative",
                         paddingLeft: "1.25rem",
-                        paddingBlock: "0.85rem",
-                        paddingRight: "1rem",
+                        paddingBlock: "0.8rem",
+                        paddingRight: "0.85rem",
                         borderRadius: "var(--r-md)",
                         border: "1px solid",
                         borderColor: isActive ? accentColor + "44" : "transparent",
@@ -103,31 +105,57 @@ export default function WorkTimeline() {
                       />
 
                       {/* Timeline dot connector */}
-                      <div
-                        style={{
-                          position: "absolute",
-                          left: "-1.35rem",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          width: 7,
-                          height: 7,
-                          borderRadius: "50%",
-                          background: isActive ? accentColor : "var(--border)",
-                          border: "2px solid var(--bg)",
-                          transition: "background 0.25s",
-                        }}
-                      />
+                      {!exp.isAward && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            left: "-1.35rem",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            width: 7,
+                            height: 7,
+                            borderRadius: "50%",
+                            background: isActive ? accentColor : "var(--border)",
+                            border: "2px solid var(--bg)",
+                            transition: "background 0.25s",
+                          }}
+                        />
+                      )}
+
+                      {/* Award star indicator */}
+                      {exp.isAward && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            left: "-1.6rem",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            width: 14,
+                            height: 14,
+                            borderRadius: "50%",
+                            background: isActive ? "var(--amber)" : "var(--surface-2)",
+                            border: "2px solid var(--bg)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "0.5rem",
+                            transition: "background 0.25s",
+                          }}
+                        >
+                          ★
+                        </div>
+                      )}
 
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                        <div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
                           <h3
                             style={{
                               fontFamily: "var(--font-sans)",
-                              fontSize: "0.95rem",
+                              fontSize: "0.9rem",
                               fontWeight: 600,
                               color: "var(--text)",
                               lineHeight: 1.3,
-                              marginBottom: "0.2rem",
+                              marginBottom: "0.15rem",
                             }}
                           >
                             {exp.role}
@@ -136,7 +164,7 @@ export default function WorkTimeline() {
                             style={{
                               fontFamily: "var(--font-serif)",
                               fontStyle: "italic",
-                              fontSize: "0.88rem",
+                              fontSize: "0.84rem",
                               color: isActive ? accentColor : "var(--text-2)",
                               transition: "color 0.25s",
                             }}
@@ -144,11 +172,11 @@ export default function WorkTimeline() {
                             {exp.org}
                           </p>
                         </div>
-                        <div style={{ textAlign: "right", flexShrink: 0, paddingLeft: "0.75rem" }}>
+                        <div style={{ textAlign: "right", flexShrink: 0, paddingLeft: "0.6rem" }}>
                           <span
                             style={{
                               fontFamily: "var(--font-mono)",
-                              fontSize: "0.58rem",
+                              fontSize: "0.56rem",
                               color: "var(--text-3)",
                               display: "block",
                               whiteSpace: "nowrap",
@@ -156,18 +184,32 @@ export default function WorkTimeline() {
                           >
                             {exp.duration}
                           </span>
-                          {exp.location && (
+                          {exp.location && !exp.isAward && (
                             <span
                               style={{
                                 fontFamily: "var(--font-mono)",
-                                fontSize: "0.55rem",
+                                fontSize: "0.52rem",
                                 color: accentColor,
                                 display: "block",
-                                marginTop: "0.15rem",
+                                marginTop: "0.12rem",
                                 letterSpacing: "0.04em",
                               }}
                             >
                               📍 {exp.location}
+                            </span>
+                          )}
+                          {exp.isAward && (
+                            <span
+                              style={{
+                                fontFamily: "var(--font-mono)",
+                                fontSize: "0.52rem",
+                                color: "var(--amber)",
+                                display: "block",
+                                marginTop: "0.12rem",
+                                letterSpacing: "0.04em",
+                              }}
+                            >
+                              ✦ Achievement
                             </span>
                           )}
                         </div>
@@ -177,10 +219,10 @@ export default function WorkTimeline() {
                       <p
                         style={{
                           fontFamily: "var(--font-sans)",
-                          fontSize: "0.82rem",
+                          fontSize: "0.78rem",
                           color: "var(--text-2)",
                           lineHeight: 1.55,
-                          marginTop: "0.5rem",
+                          marginTop: "0.45rem",
                         }}
                       >
                         {exp.shortDesc}
@@ -201,14 +243,14 @@ export default function WorkTimeline() {
                                 display: "flex",
                                 flexWrap: "wrap",
                                 gap: "0.3rem",
-                                marginTop: "0.75rem",
+                                marginTop: "0.65rem",
                               }}
                             >
                               {exp.tags.map((t) => (
                                 <span
                                   key={t}
                                   className="pill"
-                                  style={{ fontSize: "0.6rem", borderColor: accentColor + "33" }}
+                                  style={{ fontSize: "0.58rem", borderColor: accentColor + "33" }}
                                 >
                                   {t}
                                 </span>
@@ -226,25 +268,57 @@ export default function WorkTimeline() {
         })}
       </div>
 
-      {/* ── Right: Sticky Map + Context ── */}
+      {/* ── Right: Sticky Map + Context card ── */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "1.5rem",
+          gap: "1.25rem",
           position: "sticky",
           top: "5.5rem",
           height: "fit-content",
           alignSelf: "flex-start",
         }}
       >
-        <IndiaMap
-          activeLocation={activeLocKey}
-          onCityClick={(loc) => {
-            const firstMatch = experiences.find((e) => e.locationKey === loc);
-            if (firstMatch) setActiveId(firstMatch.id);
-          }}
-        />
+        {/* Map only when a geographic location is active */}
+        {activeLocKey ? (
+          <IndiaMap
+            activeLocation={activeLocKey}
+            onCityClick={(loc) => {
+              const firstMatch = experiences.find((e) => e.locationKey === loc);
+              if (firstMatch) setActiveId(firstMatch.id);
+            }}
+          />
+        ) : (
+          /* Award / remote placeholder */
+          <div
+            style={{
+              width: "100%",
+              aspectRatio: "290 / 200",
+              borderRadius: "var(--r-lg)",
+              border: "1px solid var(--amber)33",
+              background: "rgba(232,168,58,0.04)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.5rem",
+            }}
+          >
+            <span style={{ fontSize: "2rem" }}>★</span>
+            <p
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.6rem",
+                color: "var(--amber)",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}
+            >
+              Achievement
+            </p>
+          </div>
+        )}
 
         {/* Dynamic context card */}
         <AnimatePresence mode="wait">
@@ -255,28 +329,32 @@ export default function WorkTimeline() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.22 }}
             style={{
-              padding: "1.5rem",
+              padding: "1.25rem",
               borderRadius: "var(--r-lg)",
               border: "1px solid",
-              borderColor: locMeta ? locMeta.color + "33" : "var(--border)",
+              borderColor: activeExp.isAward
+                ? "var(--amber)33"
+                : locMeta
+                ? locMeta.color + "33"
+                : "var(--border)",
               background: "var(--bg-card)",
               boxShadow: "var(--sh-sm)",
             }}
           >
             <div
-              style={{ display: "flex", alignItems: "center", gap: "0.85rem", marginBottom: "1rem" }}
+              style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.9rem" }}
             >
               <div
                 style={{
-                  width: 44,
-                  height: 44,
+                  width: 40,
+                  height: 40,
                   borderRadius: "var(--r-md)",
                   background: "#fff",
                   border: "1px solid var(--border)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  padding: "6px",
+                  padding: "5px",
                   flexShrink: 0,
                   overflow: "hidden",
                 }}
@@ -293,7 +371,7 @@ export default function WorkTimeline() {
                 <h4
                   style={{
                     fontFamily: "var(--font-sans)",
-                    fontSize: "0.92rem",
+                    fontSize: "0.9rem",
                     fontWeight: 700,
                     color: "var(--text)",
                   }}
@@ -303,25 +381,31 @@ export default function WorkTimeline() {
                 <p
                   style={{
                     fontFamily: "var(--font-mono)",
-                    fontSize: "0.6rem",
-                    color: locMeta ? locMeta.color : "var(--text-3)",
+                    fontSize: "0.58rem",
+                    color: activeExp.isAward
+                      ? "var(--amber)"
+                      : locMeta
+                      ? locMeta.color
+                      : "var(--text-3)",
                     letterSpacing: "0.06em",
-                    marginTop: "0.1rem",
+                    marginTop: "0.08rem",
                   }}
                 >
-                  {activeExp.location || "Remote"}
+                  {activeExp.isAward ? "✦ Achievement" : activeExp.location || "Remote"}
                 </p>
               </div>
             </div>
 
             {/* Accent bar */}
-            {locMeta && (
+            {(locMeta || activeExp.isAward) && (
               <div
                 style={{
                   height: 3,
                   borderRadius: 2,
-                  background: `linear-gradient(90deg, ${locMeta.color}, transparent)`,
-                  marginBottom: "1rem",
+                  background: activeExp.isAward
+                    ? `linear-gradient(90deg, var(--amber), transparent)`
+                    : `linear-gradient(90deg, ${locMeta!.color}, transparent)`,
+                  marginBottom: "0.9rem",
                 }}
               />
             )}
@@ -329,7 +413,7 @@ export default function WorkTimeline() {
             <p
               style={{
                 fontFamily: "var(--font-sans)",
-                fontSize: "0.85rem",
+                fontSize: "0.82rem",
                 color: "var(--text-2)",
                 lineHeight: 1.6,
               }}
@@ -341,7 +425,7 @@ export default function WorkTimeline() {
       </div>
 
       <style>{`
-        @media (max-width: 900px) {
+        @media (max-width: 800px) {
           .timeline-grid {
             grid-template-columns: 1fr !important;
             gap: 2rem !important;

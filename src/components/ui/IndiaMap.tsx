@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { locationMeta } from "@/data/experience";
 
-type LocationKey = "delhi" | "kerala" | "bhopal";
+type LocationKey = "delhi" | "kerala" | "bhopal" | "chennai";
 
 interface IndiaMapProps {
   activeLocation: LocationKey | null;
@@ -13,15 +13,13 @@ interface IndiaMapProps {
 }
 
 const CITIES: Record<LocationKey, { x: number; y: number; label: string }> = {
-  delhi:  { x: 92,  y: 111, label: "New Delhi"    },
-  bhopal: { x: 94,  y: 182, label: "Bhopal, M.P." },
-  kerala: { x: 74,  y: 362, label: "Kochi, Kerala" },
+  delhi:   { x: 92,  y: 111, label: "New Delhi"          },
+  bhopal:  { x: 94,  y: 182, label: "Bhopal, M.P."       },
+  kerala:  { x: 74,  y: 362, label: "Kochi, Kerala"      },
+  chennai: { x: 108, y: 315, label: "Chennai, Tamil Nadu" },
 };
 
-/* ─── Geographic atmosphere overlays ───────────────────────
-   Each location gets a small contextual SVG motif that
-   appears as a faint accent when that city is selected.
-─────────────────────────────────────────────────────────── */
+/* ─── Geographic atmosphere overlays ─────────────────────── */
 function DelhiAtmosphere() {
   return (
     <g opacity="0.18">
@@ -63,6 +61,20 @@ function KeralaAtmosphere() {
   );
 }
 
+function ChennaiAtmosphere() {
+  return (
+    <g opacity="0.2">
+      {/* Marina Beach waves */}
+      <path d="M 96,330 Q 104,326 112,330 Q 120,334 128,330" fill="none" stroke="var(--chennai)" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M 98,337 Q 106,333 114,337 Q 122,341 130,337" fill="none" stroke="var(--chennai)" strokeWidth="1"   strokeLinecap="round" opacity="0.7" />
+      <path d="M 100,344 Q 108,340 116,344 Q 124,348 132,344" fill="none" stroke="var(--chennai)" strokeWidth="0.8" strokeLinecap="round" opacity="0.5" />
+      {/* Tiny boat */}
+      <path d="M 118,324 Q 122,321 126,324 L 124,327 L 120,327 Z" fill="var(--chennai)" opacity="0.3" />
+      <line x1="122" y1="321" x2="122" y2="316" stroke="var(--chennai)" strokeWidth="0.8" opacity="0.3" />
+    </g>
+  );
+}
+
 export default function IndiaMap({ activeLocation, onCityClick }: IndiaMapProps) {
   const loc = activeLocation ? locationMeta[activeLocation] : null;
 
@@ -95,6 +107,8 @@ export default function IndiaMap({ activeLocation, onCityClick }: IndiaMapProps)
             ? "radial-gradient(ellipse at 42% 52%, rgba(46,116,192,0.14) 0%, transparent 65%)"
             : activeLocation === "kerala"
             ? "radial-gradient(ellipse at 36% 88%, rgba(26,140,111,0.14) 0%, transparent 65%)"
+            : activeLocation === "chennai"
+            ? "radial-gradient(ellipse at 48% 78%, rgba(224,90,43,0.14) 0%, transparent 65%)"
             : "transparent",
           transition: "background 0.8s ease",
           pointerEvents: "none",
@@ -184,6 +198,11 @@ export default function IndiaMap({ activeLocation, onCityClick }: IndiaMapProps)
                 <KeralaAtmosphere />
               </motion.g>
             )}
+            {activeLocation === "chennai" && (
+              <motion.g key="chennai-atm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <ChennaiAtmosphere />
+              </motion.g>
+            )}
           </AnimatePresence>
 
           {/* ─── Connection path between cities ─── */}
@@ -191,7 +210,7 @@ export default function IndiaMap({ activeLocation, onCityClick }: IndiaMapProps)
             {activeLocation && (
               <motion.path
                 key={activeLocation + "-route"}
-                d="M 92,111 L 94,182 L 74,362"
+                d="M 92,111 L 94,182 L 74,362 M 94,182 L 108,315"
                 fill="none"
                 stroke="rgba(17,17,16,0.12)"
                 strokeWidth="0.8"
@@ -279,7 +298,7 @@ export default function IndiaMap({ activeLocation, onCityClick }: IndiaMapProps)
               alignItems: "center",
               gap: "0.4rem",
               padding: "0.3rem 0.7rem",
-              background: "rgba(248,247,243,0.95)",
+              background: "rgba(252,251,248,0.95)",
               backdropFilter: "blur(10px)",
               border: `1px solid ${loc.color}33`,
               borderRadius: "100px",

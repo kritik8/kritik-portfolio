@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
+import BottomNav from "@/components/layout/Navbar";
 import CursorDot from "@/components/ui/CursorDot";
 
 export const metadata: Metadata = {
@@ -40,8 +40,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <CursorDot />
-        <Navbar />
         {children}
+        <BottomNav />
       </body>
     </html>
   );

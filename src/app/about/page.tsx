@@ -7,11 +7,11 @@ import { skillCategories } from "@/data/skills";
 
 const CODING_PROFILES = [
   {
-    platform: "CodeChef",
-    rating: "1810",
-    badge: "★★★★",
-    badgeLabel: "4 Star",
-    url: "https://www.codechef.com/users/kritikjain",
+    platform: "LeetCode",
+    rating: "1580",
+    badge: null,
+    badgeLabel: null,
+    url: "https://leetcode.com/kritikjain",
   },
   {
     platform: "Codeforces",
@@ -21,11 +21,11 @@ const CODING_PROFILES = [
     url: "https://codeforces.com/profile/kritikjain",
   },
   {
-    platform: "LeetCode",
-    rating: "1580",
-    badge: null,
-    badgeLabel: null,
-    url: "https://leetcode.com/kritikjain",
+    platform: "CodeChef",
+    rating: "1810",
+    badge: "★★★★",
+    badgeLabel: "4 Star",
+    url: "https://www.codechef.com/users/kritikjain",
   },
 ];
 
@@ -39,16 +39,16 @@ const RANK_SYMBOL: Record<string, string> = {
 export default function AboutPage() {
   return (
     <main className="wrap page-pad">
-      {/* ── Header: large identity ── */}
-      <section style={{ marginBottom: "4rem" }}>
+      {/* ── Header: biography + quick facts side-by-side ── */}
+      <section style={{ marginBottom: "3.5rem" }}>
         <FadeUp>
           <p className="label" style={{ marginBottom: "1rem" }}>Biography</p>
           <h1
             className="serif"
             style={{
-              fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
+              fontSize: "clamp(2.2rem, 6vw, 4rem)",
               fontWeight: 700,
-              letterSpacing: "-0.045em",
+              letterSpacing: "-0.04em",
               lineHeight: 1.0,
               color: "var(--text)",
               marginBottom: "2rem",
@@ -60,19 +60,20 @@ export default function AboutPage() {
 
         <FadeUp delay={0.08}>
           <div
-            style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: "3rem", alignItems: "start" }}
+            style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: "2.5rem", alignItems: "start" }}
             className="bio-grid"
           >
             <p
               style={{
                 fontFamily: "var(--font-sans)",
-                fontSize: "1.05rem",
-                lineHeight: 1.7,
+                fontSize: "1rem",
+                lineHeight: 1.75,
                 color: "var(--text-2)",
-                maxWidth: "520px",
               }}
             >
-              Final-year B.Tech Information Technology student at IIIT Bhopal. I work at the intersection of backend engineering, AI/LLM systems, applied machine learning, and research.
+              Final-year B.Tech Information Technology student at IIIT Bhopal. I work at the intersection of backend
+              engineering, AI/LLM systems, applied machine learning, and research. I care deeply about building things
+              that are both technically rigorous and genuinely useful.
             </p>
 
             {/* Quick facts */}
@@ -89,9 +90,9 @@ export default function AboutPage() {
             >
               {[
                 { label: "Institution", value: "IIIT Bhopal" },
-                { label: "Degree", value: "B.Tech Information Technology" },
-                { label: "CGPA", value: "9.64 / 10" },
-                { label: "Focus", value: "Backend · AI/LLM · Applied ML" },
+                { label: "Degree",      value: "B.Tech Information Technology" },
+                { label: "CGPA",        value: "9.64 / 10" },
+                { label: "Focus",       value: "Backend · AI/LLM · Applied ML" },
               ].map((item) => (
                 <div key={item.label}>
                   <p className="label" style={{ fontSize: "0.56rem", marginBottom: "0.15rem" }}>
@@ -114,12 +115,10 @@ export default function AboutPage() {
         </FadeUp>
       </section>
 
-      <div
-        style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3.5rem" }}
-      />
+      <div style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3rem" }} />
 
       {/* ── Coding Profiles ── */}
-      <section style={{ marginBottom: "3.5rem" }}>
+      <section style={{ marginBottom: "3rem" }}>
         <FadeUp>
           <p className="label" style={{ marginBottom: "1.25rem" }}>Competitive Programming</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -153,7 +152,6 @@ export default function AboutPage() {
                     (e.currentTarget as HTMLElement).style.background = "var(--bg-card)";
                   }}
                 >
-                  {/* Platform name */}
                   <span
                     style={{
                       fontFamily: "var(--font-mono)",
@@ -167,8 +165,6 @@ export default function AboutPage() {
                   >
                     {cp.platform.toUpperCase()}
                   </span>
-
-                  {/* Rating */}
                   <span
                     className="serif"
                     style={{
@@ -182,8 +178,6 @@ export default function AboutPage() {
                   >
                     {cp.rating}
                   </span>
-
-                  {/* Badge */}
                   {cp.badge && (
                     <span
                       style={{
@@ -201,14 +195,11 @@ export default function AboutPage() {
                       {cp.badge}
                     </span>
                   )}
-
-                  {/* Arrow */}
                   <span
                     style={{
                       fontFamily: "var(--font-sans)",
                       fontSize: "0.8rem",
                       color: "var(--text-3)",
-                      transition: "color 0.15s, transform 0.15s",
                     }}
                   >
                     View ↗
@@ -220,81 +211,10 @@ export default function AboutPage() {
         </FadeUp>
       </section>
 
-      <div style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3.5rem" }} />
-
-      {/* ── Amazon ML Summer School ── */}
-      <section style={{ marginBottom: "3.5rem" }}>
-        <FadeUp>
-          <p className="label" style={{ marginBottom: "1.25rem" }}>Featured Credential</p>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "auto 1fr",
-              gap: "1.5rem",
-              alignItems: "center",
-              padding: "1.5rem",
-              borderRadius: "var(--r-lg)",
-              background: "var(--bg-card)",
-              border: "1px solid var(--border)",
-              boxShadow: "var(--sh-sm)",
-            }}
-            className="amazon-grid"
-          >
-            <div
-              style={{
-                width: 56,
-                height: 56,
-                borderRadius: "var(--r-md)",
-                background: "#fff",
-                border: "1px solid var(--border)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "8px",
-                flexShrink: 0,
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logos/amazon-logo.png"
-                alt="Amazon logo"
-                style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                className="logo-mono"
-              />
-            </div>
-            <div>
-              <h3
-                style={{
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "1.05rem",
-                  fontWeight: 700,
-                  color: "var(--text)",
-                  marginBottom: "0.3rem",
-                }}
-              >
-                Amazon ML Summer School
-              </h3>
-              <p
-                style={{
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "0.88rem",
-                  color: "var(--text-2)",
-                  lineHeight: 1.55,
-                }}
-              >
-                Selected for two consecutive annual cohorts —{" "}
-                <strong>June–July 2025</strong> and <strong>June–July 2026</strong>.
-                Intensive program covering advanced ML theory, deep learning, and scalable systems.
-              </p>
-            </div>
-          </div>
-        </FadeUp>
-      </section>
-
-      <div style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3.5rem" }} />
+      <div style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3rem" }} />
 
       {/* ── Achievements ── */}
-      <section style={{ marginBottom: "3.5rem" }}>
+      <section style={{ marginBottom: "3rem" }}>
         <FadeUp>
           <p className="label" style={{ marginBottom: "1.5rem" }}>Achievements</p>
 
@@ -397,7 +317,7 @@ export default function AboutPage() {
         </FadeUp>
       </section>
 
-      <div style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3.5rem" }} />
+      <div style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3rem" }} />
 
       {/* ── Technical Toolbox ── */}
       <section>
@@ -435,15 +355,14 @@ export default function AboutPage() {
 
       <style>{`
         @media (max-width: 900px) {
-          .bio-grid      { grid-template-columns: 1fr !important; gap: 2rem !important; }
-          .skills-grid   { grid-template-columns: 1fr 1fr !important; }
-          .stats-row     { grid-template-columns: 1fr 1fr !important; }
+          .bio-grid    { grid-template-columns: 1fr !important; gap: 2rem !important; }
+          .skills-grid { grid-template-columns: 1fr 1fr !important; }
+          .stats-row   { grid-template-columns: 1fr 1fr !important; }
         }
         @media (max-width: 600px) {
-          .skills-grid   { grid-template-columns: 1fr !important; }
-          .stats-row     { grid-template-columns: 1fr 1fr !important; }
-          .ach-grid      { grid-template-columns: 1fr !important; }
-          .amazon-grid   { grid-template-columns: 1fr !important; }
+          .skills-grid { grid-template-columns: 1fr !important; }
+          .stats-row   { grid-template-columns: 1fr 1fr !important; }
+          .ach-grid    { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </main>

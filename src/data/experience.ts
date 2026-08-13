@@ -5,12 +5,13 @@ export interface Experience {
   duration: string;
   year: string;
   location: string;
-  locationKey: "delhi" | "kerala" | "bhopal" | null;
+  locationKey: "delhi" | "kerala" | "bhopal" | "chennai" | null;
   shortDesc: string;
   fullDesc: string;
   tags: string[];
   logo: string;
   logoAlt: string;
+  isAward?: boolean;
   // Geographic position in the India SVG (viewBox 0 0 290 385)
   mapX?: number;
   mapY?: number;
@@ -35,19 +36,37 @@ export const experiences: Experience[] = [
     mapY: 111,
   },
   {
+    id: "amazon-ml",
+    org: "Amazon ML Summer School",
+    role: "Selected Participant",
+    duration: "June–July 2025 · June–July 2026",
+    year: "2025",
+    location: "Virtual",
+    locationKey: null,
+    shortDesc: "Selected for two consecutive annual cohorts of Amazon's intensive ML program.",
+    fullDesc:
+      "Selected participant in Amazon ML Summer School for two consecutive annual cohorts — June–July 2025 and June–July 2026. Intensive program covering advanced ML theory, deep learning architectures, large-scale systems, and applied research.",
+    tags: ["Machine Learning", "Deep Learning", "Applied Research", "Amazon"],
+    logo: "/logos/amazon-logo.png",
+    logoAlt: "Amazon logo",
+    isAward: true,
+  },
+  {
     id: "qriocity",
     org: "Qriocity",
     role: "Machine Learning Intern",
     duration: "November 2025 – January 2026",
     year: "2025",
-    location: "Remote",
-    locationKey: null,
+    location: "Chennai",
+    locationKey: "chennai",
     shortDesc: "Built ML pipelines that reduced analysis turnaround time by 30%.",
     fullDesc:
       "Developed end-to-end applied ML pipelines — data processing, model experimentation, evaluation, and deployment-ready outputs. Automated experimentation, validation, and reporting workflows, achieving a 30% reduction in analysis turnaround time, 20% reduction in repeated processing overhead, and a 40% increase in experimentation throughput.",
     tags: ["Python", "ML Pipelines", "Data Processing", "Model Evaluation", "Automation"],
     logo: "/logos/qriocity-logo.png",
     logoAlt: "Qriocity logo",
+    mapX: 108,
+    mapY: 315,
   },
   {
     id: "ieee",
@@ -126,5 +145,13 @@ export const locationMeta = {
     viewScale: 2.0,
     viewX:     142,
     viewY:     -339,
+  },
+  chennai: {
+    color:     "var(--chennai)",
+    bgColor:   "var(--chennai-bg)",
+    label:     "Chennai, Tamil Nadu",
+    viewScale: 2.2,
+    viewX:     105,
+    viewY:     -148,
   },
 };
