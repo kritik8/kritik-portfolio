@@ -12,6 +12,11 @@ export const metadata: Metadata = {
     "Personal website of Kritik Jain — Software engineer, AI systems builder and researcher. Final-year B.Tech IT at IIIT Bhopal.",
   keywords: ["Kritik Jain", "Software Engineer", "AI Engineer", "Backend", "Machine Learning", "IIIT Bhopal", "Research"],
   authors: [{ name: "Kritik Jain" }],
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -36,6 +41,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (!theme) {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  }
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
         />
       </head>
       <body>

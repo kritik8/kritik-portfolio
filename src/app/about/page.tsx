@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { FadeUp } from "@/components/motion/FadeUp";
 import { achievements, stats } from "@/data/achievements";
 import { skillCategories } from "@/data/skills";
+import { socialLinks } from "@/data/socials";
 
 const CODING_PROFILES = [
   {
@@ -11,21 +12,21 @@ const CODING_PROFILES = [
     rating: "1580",
     badge: null,
     badgeLabel: null,
-    url: "https://leetcode.com/kritikjain",
+    url: socialLinks.leetcode,
   },
   {
     platform: "Codeforces",
     rating: "1270",
     badge: "PUPIL",
     badgeLabel: "Pupil",
-    url: "https://codeforces.com/profile/kritikjain",
+    url: socialLinks.codeforces,
   },
   {
     platform: "CodeChef",
     rating: "1810",
     badge: "★★★★",
     badgeLabel: "4 Star",
-    url: "https://www.codechef.com/users/kritikjain",
+    url: socialLinks.codechef,
   },
 ];
 

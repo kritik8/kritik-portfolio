@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { FadeUp } from "@/components/motion/FadeUp";
+import { socialLinks } from "@/data/socials";
 
 const LINKS = [
-  { label: "GitHub",      href: "https://github.com/kritik8",              arrow: "↗" },
-  { label: "LinkedIn",    href: "https://linkedin.com/in/kritikjain",      arrow: "↗" },
-  { label: "CodeChef",    href: "https://www.codechef.com/users/kritikjain", arrow: "↗" },
-  { label: "Codeforces",  href: "https://codeforces.com/profile/kritikjain", arrow: "↗" },
-  { label: "LeetCode",    href: "https://leetcode.com/kritikjain",         arrow: "↗" },
+  { label: "GitHub", href: socialLinks.github, arrow: "↗" },
+  { label: "LinkedIn", href: socialLinks.linkedin, arrow: "↗" },
+  { label: "CodeChef", href: socialLinks.codechef, arrow: "↗" },
+  { label: "Codeforces", href: socialLinks.codeforces, arrow: "↗" },
+  { label: "LeetCode", href: socialLinks.leetcode, arrow: "↗" },
 ];
 
 export default function ContactPage() {
@@ -226,49 +227,9 @@ export default function ContactPage() {
                 ))}
               </div>
             </div>
-
-            <div
-              style={{
-                padding: "1.5rem",
-                borderRadius: "var(--r-lg)",
-                background: "var(--surface)",
-                border: "1px solid var(--border-subtle)",
-              }}
-            >
-              <p className="label" style={{ marginBottom: "0.5rem" }}>Currently based in</p>
-              <p
-                style={{
-                  fontFamily: "var(--font-serif)",
-                  fontSize: "1.1rem",
-                  fontStyle: "italic",
-                  color: "var(--text)",
-                }}
-              >
-                Bhopal, Madhya Pradesh, India
-              </p>
-            </div>
           </div>
         </FadeUp>
       </div>
-
-      {/* Footer */}
-      <footer
-        style={{
-          marginTop: "6rem",
-          paddingTop: "2rem",
-          borderTop: "1px solid var(--border-subtle)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "0.5rem",
-        }}
-      >
-        <span className="serif" style={{ fontWeight: 500 }}>Kritik Jain</span>
-        <span className="label" style={{ fontSize: "0.52rem" }}>
-          © 2026 Kritik Jain · IIIT Bhopal · Built with Next.js
-        </span>
-      </footer>
 
       <style>{`
         @media (max-width: 900px) {

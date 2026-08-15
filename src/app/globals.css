@@ -69,6 +69,56 @@
   --t-spring: cubic-bezier(0.25,0.46,0.45,0.94);
 }
 
+html[data-theme="dark"] {
+  --bg:            #0D0D0C;
+  --bg-card:       rgba(20,20,19,0.7);
+  --surface:       #191917;
+  --surface-2:     #242422;
+  --border:        #2E2E2A;
+  --border-subtle: #1C1C1A;
+
+  --text:   #F7F6F0;
+  --text-2: #B2B0A5;
+  --text-3: #75746C;
+
+  /* Location accents adapted for dark mode */
+  --delhi:     #E86E38;
+  --delhi-bg:  rgba(232,110,56,0.12);
+  --kerala:    #22A382;
+  --kerala-bg: rgba(34,163,130,0.12);
+  --bhopal:    #4389D6;
+  --bhopal-bg: rgba(67,137,214,0.12);
+  --chennai:   #EB6C3D;
+  --chennai-bg:rgba(235,108,61,0.12);
+
+  /* Extended personality palette */
+  --coral:    #F57560;
+  --sky:      #5FB0EB;
+  --sage:     #6CBD8C;
+  --lavender: #A087E3;
+  --amber:    #EBB752;
+
+  /* Project accents */
+  --blue:   #4F81FA;
+  --gold:   #DB9E42;
+  --green:  #24C78D;
+
+  /* Research */
+  --violet:    #7D61EB;
+  --violet-bg: rgba(125,97,235,0.12);
+
+  /* Shadows for dark mode */
+  --sh-sm: 0 1px 3px rgba(0,0,0,0.3), 0 1px 8px rgba(0,0,0,0.2);
+  --sh-md: 0 4px 20px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3);
+  --sh-lg: 0 12px 48px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+  --sh-nav: 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+html[data-theme="dark"] .logo-mono {
+  filter: grayscale(100%) invert(1) brightness(0.9) contrast(1.2);
+  mix-blend-mode: screen;
+}
+
 /* ─── Reset ──────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -87,6 +137,7 @@ body {
   line-height: 1.6;
   /* Space for floating bottom nav */
   padding-bottom: 88px;
+  transition: background var(--t-base), color var(--t-base), border-color var(--t-base);
 }
 
 /* Custom cursor */
@@ -190,13 +241,14 @@ body {
   display: flex;
   align-items: center;
   gap: 2px;
+  background: var(--bg-card);
   padding: 6px;
-  background: rgba(252,251,248,0.88);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(221,219,211,0.7);
+  border: 1px solid var(--border);
   border-radius: 100px;
   box-shadow: var(--sh-nav);
+  transition: background var(--t-base), border-color var(--t-base), box-shadow var(--t-base);
 }
 
 .nav-icon-btn {
