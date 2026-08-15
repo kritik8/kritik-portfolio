@@ -193,23 +193,27 @@ body {
 
 /* ─── Logo treatment ─────────────────────────────────────── */
 .logo-mono-light-bg {
-  filter: grayscale(100%) brightness(0.1) contrast(1.4);
+  filter: grayscale(100%);
   mix-blend-mode: multiply;
   transition: filter var(--t-base);
+  opacity: 0.85;
 }
 .logo-mono-dark-bg {
-  filter: invert(1) grayscale(100%) brightness(0.1) contrast(1.4);
+  filter: invert(1) grayscale(100%);
   mix-blend-mode: multiply;
   transition: filter var(--t-base);
+  opacity: 0.85;
 }
 
 html[data-theme="dark"] .logo-mono-light-bg {
-  filter: invert(1) grayscale(100%) brightness(0.9) contrast(1.2);
+  filter: invert(1) grayscale(100%);
   mix-blend-mode: screen;
+  opacity: 0.85;
 }
 html[data-theme="dark"] .logo-mono-dark-bg {
-  filter: grayscale(100%) brightness(0.9) contrast(1.2);
+  filter: grayscale(100%);
   mix-blend-mode: screen;
+  opacity: 0.85;
 }
 
 /* ─── Tag pill ───────────────────────────────────────────── */

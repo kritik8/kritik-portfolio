@@ -15,11 +15,30 @@ const LINKS = [
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to send message.");
+      }
+      setSent(true);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputStyle: React.CSSProperties = {
@@ -153,10 +172,23 @@ export default function ContactPage() {
                     onBlur={(e) => ((e.currentTarget as HTMLTextAreaElement).style.borderColor = "var(--border)")}
                   />
                 </div>
+                {error && (
+                  <p
+                    style={{
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.82rem",
+                      color: "var(--delhi)",
+                      marginBlock: "0.25rem",
+                    }}
+                  >
+                    {error}
+                  </p>
+                )}
                 <motion.button
                   type="submit"
-                  whileHover={{ scale: 1.015 }}
-                  whileTap={{ scale: 0.98 }}
+                  disabled={loading}
+                  whileHover={loading ? {} : { scale: 1.015 }}
+                  whileTap={loading ? {} : { scale: 0.98 }}
                   style={{
                     padding: "0.85rem 1.5rem",
                     background: "var(--text)",
@@ -166,11 +198,12 @@ export default function ContactPage() {
                     fontFamily: "var(--font-sans)",
                     fontSize: "0.9rem",
                     fontWeight: 600,
-                    cursor: "pointer",
+                    cursor: loading ? "not-allowed" : "pointer",
                     letterSpacing: "-0.01em",
+                    opacity: loading ? 0.7 : 1,
                   }}
                 >
-                  Send message →
+                  {loading ? "Sending..." : "Send message →"}
                 </motion.button>
               </form>
             )}
