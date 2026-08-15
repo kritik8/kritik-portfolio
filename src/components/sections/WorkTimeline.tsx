@@ -349,7 +349,7 @@ export default function WorkTimeline() {
                   width: 40,
                   height: 40,
                   borderRadius: "var(--r-md)",
-                  background: "#fff",
+                  background: "var(--logo-box-bg)",
                   border: "1px solid var(--border)",
                   display: "flex",
                   alignItems: "center",
@@ -357,6 +357,7 @@ export default function WorkTimeline() {
                   padding: "5px",
                   flexShrink: 0,
                   overflow: "hidden",
+                  transition: "background var(--t-base), border-color var(--t-base)",
                 }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -364,7 +365,7 @@ export default function WorkTimeline() {
                   src={activeExp.logo}
                   alt={activeExp.logoAlt}
                   style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                  className="logo-mono"
+                  className={activeExp.logoBg === "dark" ? "logo-mono-dark-bg" : "logo-mono-light-bg"}
                 />
               </div>
               <div>

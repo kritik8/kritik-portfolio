@@ -53,10 +53,10 @@ export default function CursorDot() {
           width: 7,
           height: 7,
           borderRadius: "50%",
-          background: "var(--text)",
+          background: "var(--cursor-bg, var(--text))",
           pointerEvents: "none",
           zIndex: 99999,
-          mixBlendMode: "multiply",
+          mixBlendMode: "var(--cursor-blend, multiply)" as any,
           willChange: "transform",
         }}
       />
@@ -69,10 +69,11 @@ export default function CursorDot() {
           width: 32,
           height: 32,
           borderRadius: "50%",
-          border: "1px solid rgba(17,17,16,0.25)",
+          border: "1px solid var(--cursor-ring, rgba(17,17,16,0.25))",
           pointerEvents: "none",
           zIndex: 99998,
           willChange: "transform",
+          transition: "border-color 0.3s ease",
         }}
       />
     </>

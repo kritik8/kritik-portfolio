@@ -67,6 +67,12 @@
   --t-base:   0.25s ease;
   --t-slow:   0.45s ease;
   --t-spring: cubic-bezier(0.25,0.46,0.45,0.94);
+
+  /* Custom Cursor & Logo Box */
+  --cursor-bg: var(--text);
+  --cursor-ring: rgba(17, 17, 16, 0.25);
+  --cursor-blend: multiply;
+  --logo-box-bg: #ffffff;
 }
 
 html[data-theme="dark"] {
@@ -112,11 +118,12 @@ html[data-theme="dark"] {
   --sh-md: 0 4px 20px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3);
   --sh-lg: 0 12px 48px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
   --sh-nav: 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
-}
 
-html[data-theme="dark"] .logo-mono {
-  filter: grayscale(100%) invert(1) brightness(0.9) contrast(1.2);
-  mix-blend-mode: screen;
+  /* Custom Cursor & Logo Box */
+  --cursor-bg: var(--text);
+  --cursor-ring: rgba(247, 246, 240, 0.3);
+  --cursor-blend: screen;
+  --logo-box-bg: var(--surface);
 }
 
 /* ─── Reset ──────────────────────────────────────────────── */
@@ -185,10 +192,24 @@ body {
 }
 
 /* ─── Logo treatment ─────────────────────────────────────── */
-.logo-mono {
+.logo-mono-light-bg {
   filter: grayscale(100%) brightness(0.1) contrast(1.4);
   mix-blend-mode: multiply;
-  transition: filter 0.25s ease;
+  transition: filter var(--t-base);
+}
+.logo-mono-dark-bg {
+  filter: invert(1) grayscale(100%) brightness(0.1) contrast(1.4);
+  mix-blend-mode: multiply;
+  transition: filter var(--t-base);
+}
+
+html[data-theme="dark"] .logo-mono-light-bg {
+  filter: invert(1) grayscale(100%) brightness(0.9) contrast(1.2);
+  mix-blend-mode: screen;
+}
+html[data-theme="dark"] .logo-mono-dark-bg {
+  filter: grayscale(100%) brightness(0.9) contrast(1.2);
+  mix-blend-mode: screen;
 }
 
 /* ─── Tag pill ───────────────────────────────────────────── */

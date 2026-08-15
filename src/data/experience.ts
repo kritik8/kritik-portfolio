@@ -11,6 +11,7 @@ export interface Experience {
   tags: string[];
   logo: string;
   logoAlt: string;
+  logoBg?: "light" | "dark";
   isAward?: boolean;
   // Geographic position in the India SVG (viewBox 0 0 290 385)
   mapX?: number;
@@ -32,6 +33,7 @@ export const experiences: Experience[] = [
     tags: ["Go", "FastAPI", "LLM-as-a-Judge", "Langfuse", "OpenTelemetry", "BigQuery", "GPU Deployment"],
     logo: "/logos/indiamart-logo.png",
     logoAlt: "IndiaMART logo",
+    logoBg: "light",
     mapX: 92,
     mapY: 111,
   },
@@ -49,6 +51,7 @@ export const experiences: Experience[] = [
     tags: ["Machine Learning", "Deep Learning", "Applied Research", "Amazon"],
     logo: "/logos/amazon-logo.png",
     logoAlt: "Amazon logo",
+    logoBg: "light",
     isAward: true,
   },
   {
@@ -65,6 +68,7 @@ export const experiences: Experience[] = [
     tags: ["Python", "ML Pipelines", "Data Processing", "Model Evaluation", "Automation"],
     logo: "/logos/qriocity-logo.png",
     logoAlt: "Qriocity logo",
+    logoBg: "light",
     mapX: 108,
     mapY: 315,
   },
@@ -82,6 +86,7 @@ export const experiences: Experience[] = [
     tags: ["Leadership", "Technical Events", "Community", "IEEE"],
     logo: "/logos/ieee-logo.png",
     logoAlt: "IEEE logo",
+    logoBg: "dark",
     mapX: 94,
     mapY: 182,
   },
@@ -99,6 +104,7 @@ export const experiences: Experience[] = [
     tags: ["Teaching", "Programming", "Mentoring", "C++"],
     logo: "/logos/iiit-logo.png",
     logoAlt: "IIIT Bhopal logo",
+    logoBg: "light",
     mapX: 94,
     mapY: 182,
   },
@@ -116,6 +122,7 @@ export const experiences: Experience[] = [
     tags: ["UI Design", "UX Research", "Figma", "Product Design"],
     logo: "/logos/gamerstag-logo.png",
     logoAlt: "GamersTag logo",
+    logoBg: "dark",
     mapX: 74,
     mapY: 362,
   },
