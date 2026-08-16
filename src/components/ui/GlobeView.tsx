@@ -58,10 +58,20 @@ export default function GlobeView({ activeId, setActiveId }: GlobeViewProps) {
   // Track size/resize
   useEffect(() => {
     if (!containerRef.current) return;
+
+    // Initialize dimensions on mount to prevent rendering with 0 width
+    const rect = containerRef.current.getBoundingClientRect();
+    setDimensions({
+      width: rect.width || 340,
+      height: rect.height || rect.width || 340,
+    });
+
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         const { width, height } = entry.contentRect;
-        setDimensions({ width, height: height || width }); // Keep square or full height
+        if (width > 0) {
+          setDimensions({ width, height: height || width });
+        }
       }
     });
     resizeObserver.observe(containerRef.current);
@@ -90,23 +100,28 @@ export default function GlobeView({ activeId, setActiveId }: GlobeViewProps) {
     if (!isGlobeReady || !globeRef.current) return;
 
     // Center on India initial view
-    globeRef.current.pointOfView({ lat: 21, lng: 78, altitude: 1.85 }, 0);
+    if (typeof globeRef.current.pointOfView === "function") {
+      globeRef.current.pointOfView({ lat: 21, lng: 78, altitude: 1.85 }, 0);
+    }
 
-    const controls = globeRef.current.controls();
-    if (controls) {
-      controls.autoRotate = true;
-      controls.autoRotateSpeed = 0.35;
-      controls.enableZoom = true;
-      controls.enablePan = false;
-      controls.minDistance = 200;
-      controls.maxDistance = 500;
+    if (typeof globeRef.current.controls === "function") {
+      const controls = globeRef.current.controls();
+      if (controls) {
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.35;
+        controls.enableZoom = true;
+        controls.enablePan = false;
+        controls.minDistance = 200;
+        controls.maxDistance = 500;
+      }
     }
 
     // Handle prefers-reduced-motion
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const handleMotionChange = (e: MediaQueryListEvent | MediaQueryList) => {
-      if (globeRef.current?.controls()) {
-        globeRef.current.controls().autoRotate = !e.matches;
+      if (globeRef.current && typeof globeRef.current.controls === "function") {
+        const c = globeRef.current.controls();
+        if (c) c.autoRotate = !e.matches;
       }
     };
     handleMotionChange(mediaQuery);
@@ -115,23 +130,14 @@ export default function GlobeView({ activeId, setActiveId }: GlobeViewProps) {
     return () => mediaQuery.removeEventListener("change", handleMotionChange);
   }, [isGlobeReady]);
 
-  // Dynamically set globe material color based on theme
-  useEffect(() => {
-    if (!isGlobeReady || !globeRef.current) return;
-    const material = globeRef.current.globeMaterial();
-    if (material) {
-      material.color.set(isDark ? "#121211" : "#FAF9F5");
-    }
-  }, [isDark, isGlobeReady]);
-
   // Hovering timeline item flies to marker on globe
   useEffect(() => {
-    if (!isGlobeReady) return;
+    if (!isGlobeReady || !globeRef.current) return;
     const activeExp = experiences.find((e) => e.id === activeId);
     if (!activeExp || !activeExp.locationKey) return;
 
     const marker = MARKERS.find((m) => m.key === activeExp.locationKey);
-    if (marker && globeRef.current) {
+    if (marker && typeof globeRef.current.pointOfView === "function") {
       globeRef.current.pointOfView(
         { lat: marker.lat, lng: marker.lng, altitude: 1.6 },
         1000
@@ -187,7 +193,7 @@ export default function GlobeView({ activeId, setActiveId }: GlobeViewProps) {
           width={dimensions.width}
           height={dimensions.height}
           backgroundColor="rgba(0,0,0,0)"
-          globeImageUrl="https://unpkg.com/three-globe/example/img/earth-light.jpg"
+          globeImageUrl={isDark ? "/earth-dark.jpg" : "/earth-day.jpg"}
           showAtmosphere={false}
           
           // Markers / Points configuration
