@@ -13,7 +13,6 @@ export function sendEmailViaSMTP(options: MailOptions, auth: { user: string; pas
     const socket = tls.connect({
       host: "smtp.gmail.com",
       port: 465,
-      rejectUnauthorized: false, // Turn off strict cert check for serverless compatibility
     });
 
     let buffer = "";
