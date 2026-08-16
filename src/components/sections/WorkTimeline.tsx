@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { experiences, locationMeta } from "@/data/experience";
-import IndiaMap from "@/components/ui/IndiaMap";
+import dynamic from "next/dynamic";
+const GlobeView = dynamic(() => import("@/components/ui/GlobeView"), { ssr: false });
+
 
 type LocationKey = "delhi" | "kerala" | "bhopal" | "chennai";
 
@@ -280,45 +282,7 @@ export default function WorkTimeline() {
           alignSelf: "flex-start",
         }}
       >
-        {/* Map only when a geographic location is active */}
-        {activeLocKey ? (
-          <IndiaMap
-            activeLocation={activeLocKey}
-            onCityClick={(loc) => {
-              const firstMatch = experiences.find((e) => e.locationKey === loc);
-              if (firstMatch) setActiveId(firstMatch.id);
-            }}
-          />
-        ) : (
-          /* Award / remote placeholder */
-          <div
-            style={{
-              width: "100%",
-              aspectRatio: "290 / 200",
-              borderRadius: "var(--r-lg)",
-              border: "1px solid var(--amber)33",
-              background: "rgba(232,168,58,0.04)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem",
-            }}
-          >
-            <span style={{ fontSize: "2rem" }}>★</span>
-            <p
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.6rem",
-                color: "var(--amber)",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-              }}
-            >
-              Achievement
-            </p>
-          </div>
-        )}
+        <GlobeView activeId={activeId} setActiveId={setActiveId} />
 
         {/* Dynamic context card */}
         <AnimatePresence mode="wait">

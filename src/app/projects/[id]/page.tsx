@@ -209,6 +209,36 @@ export default function ProjectDetailPage({ params }: PageProps) {
                 Completed & Verified
               </p>
             </div>
+
+            <div className="divider" style={{ height: 1, background: "var(--border-subtle)", marginBlock: "0.25rem" }} />
+
+            <div>
+              <p className="label" style={{ marginBottom: "0.5rem" }}>
+                Project Links
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                {project.links.map((link, idx) => (
+                  <a
+                    key={idx}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "0.74rem",
+                      fontWeight: 600,
+                      color: link.type === "live" ? "var(--kerala)" : "var(--text)",
+                      textDecoration: "none",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.25rem",
+                    }}
+                  >
+                    {link.type === "github" ? "📦" : "⚡"} {link.label} ↗
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         </FadeUp>
       </div>
