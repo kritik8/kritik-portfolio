@@ -47,6 +47,57 @@ const MARKERS = [
   },
 ];
 
+// Dynamically converts the earth map into a custom monochrome color scheme matching the active theme
+const processMonochromeTexture = (src: string, isDark: boolean): Promise<string> => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        resolve(src);
+        return;
+      }
+      ctx.drawImage(img, 0, 0);
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imgData.data;
+
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        // Standard luminosity formula for grayscale
+        const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+
+        if (!isDark) {
+          // Light Mode: Oceans (originally dark) -> Off-White (#FAF9F5, RGB: 250, 249, 245)
+          // Landmasses (originally bright) -> Dark Muted Grey (#75746C, RGB: 117, 116, 108)
+          const ratio = gray / 255;
+          data[i] = 250 - ratio * (250 - 117);     // R
+          data[i + 1] = 249 - ratio * (249 - 116); // G
+          data[i + 2] = 245 - ratio * (245 - 108); // B
+        } else {
+          // Dark Mode: Oceans (originally dark) -> Deep Charcoal (#121211, RGB: 18, 18, 17)
+          // Landmasses (originally bright) -> Medium Grey (#3E3D39, RGB: 62, 61, 57)
+          const ratio = gray / 255;
+          data[i] = 18 + ratio * (62 - 18);     // R
+          data[i + 1] = 18 + ratio * (61 - 18); // G
+          data[i + 2] = 17 + ratio * (57 - 17); // B
+        }
+      }
+      ctx.putImageData(imgData, 0, 0);
+      resolve(canvas.toDataURL());
+    };
+    img.onerror = () => {
+      resolve(src);
+    };
+    img.src = src;
+  });
+};
+
 export default function GlobeView({ activeId, setActiveId }: GlobeViewProps) {
   const globeRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -54,6 +105,14 @@ export default function GlobeView({ activeId, setActiveId }: GlobeViewProps) {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const isDark = theme === "dark";
   const [isGlobeReady, setIsGlobeReady] = useState(false);
+  const [processedTexture, setProcessedTexture] = useState<string>("");
+
+  // Dynamically generate monochrome texture matching active theme
+  useEffect(() => {
+    processMonochromeTexture("/earth-dark.jpg", isDark).then((url) => {
+      setProcessedTexture(url);
+    });
+  }, [isDark]);
 
   // Track size/resize
   useEffect(() => {
@@ -101,7 +160,7 @@ export default function GlobeView({ activeId, setActiveId }: GlobeViewProps) {
 
     // Center on India initial view
     if (typeof globeRef.current.pointOfView === "function") {
-      globeRef.current.pointOfView({ lat: 21, lng: 78, altitude: 1.85 }, 0);
+      globeRef.current.pointOfView({ lat: 21, lng: 78, altitude: 1.35 }, 0);
     }
 
     if (typeof globeRef.current.controls === "function") {
@@ -139,7 +198,7 @@ export default function GlobeView({ activeId, setActiveId }: GlobeViewProps) {
     const marker = MARKERS.find((m) => m.key === activeExp.locationKey);
     if (marker && typeof globeRef.current.pointOfView === "function") {
       globeRef.current.pointOfView(
-        { lat: marker.lat, lng: marker.lng, altitude: 1.6 },
+        { lat: marker.lat, lng: marker.lng, altitude: 1.2 },
         1000
       );
     }
@@ -193,7 +252,7 @@ export default function GlobeView({ activeId, setActiveId }: GlobeViewProps) {
           width={dimensions.width}
           height={dimensions.height}
           backgroundColor="rgba(0,0,0,0)"
-          globeImageUrl={isDark ? "/earth-dark.jpg" : "/earth-day.jpg"}
+          globeImageUrl={processedTexture || "/earth-dark.jpg"}
           showAtmosphere={false}
           
           // Markers / Points configuration
