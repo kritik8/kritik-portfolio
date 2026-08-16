@@ -1,4 +1,5 @@
 "use client";
+// Trigger deployment build for SMTP variables
 
 import { useState } from "react";
 import { motion } from "motion/react";
