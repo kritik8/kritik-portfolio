@@ -56,7 +56,7 @@ export default function CursorDot() {
           background: "var(--cursor-bg, var(--text))",
           pointerEvents: "none",
           zIndex: 99999,
-          mixBlendMode: "var(--cursor-blend, multiply)" as any,
+          mixBlendMode: "var(--cursor-blend, multiply)" as React.CSSProperties["mixBlendMode"],
           willChange: "transform",
         }}
       />

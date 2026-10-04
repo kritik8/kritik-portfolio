@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
@@ -14,6 +14,31 @@ import {
   Moon,
 } from "lucide-react";
 import { socialLinks } from "@/data/socials";
+
+const subscribeMount = () => () => {};
+const getMountSnapshot = () => true;
+const getServerMountSnapshot = () => false;
+
+function subscribeTheme(callback: () => void) {
+  if (typeof window === "undefined") return () => {};
+  const observer = new MutationObserver(() => {
+    callback();
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+  return () => observer.disconnect();
+}
+
+function getThemeSnapshot(): "light" | "dark" {
+  if (typeof document === "undefined") return "light";
+  return (document.documentElement.getAttribute("data-theme") as "light" | "dark") || "light";
+}
+
+function getServerThemeSnapshot(): "light" | "dark" {
+  return "light";
+}
 
 const NAV_ITEMS = [
   { href: "/about",    label: "About",    Icon: User         },
@@ -51,23 +76,11 @@ const Separator = () => (
 export default function BottomNav() {
   const pathname = usePathname();
   const [hovered, setHovered] = useState<string | null>(null);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      setTheme(prefersDark ? "dark" : "light");
-    }
-  }, []);
+  const mounted = useSyncExternalStore(subscribeMount, getMountSnapshot, getServerMountSnapshot);
+  const theme = useSyncExternalStore(subscribeTheme, getThemeSnapshot, getServerThemeSnapshot);
 
   const toggleTheme = () => {
     const nextTheme = theme === "light" ? "dark" : "light";
-    setTheme(nextTheme);
     document.documentElement.setAttribute("data-theme", nextTheme);
     localStorage.setItem("theme", nextTheme);
   };

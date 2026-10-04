@@ -1,5 +1,4 @@
 "use client";
-// Trigger deployment build for SMTP variables
 
 import { useState } from "react";
 import { motion } from "motion/react";
@@ -7,11 +6,11 @@ import { FadeUp } from "@/components/motion/FadeUp";
 import { socialLinks } from "@/data/socials";
 
 const LINKS = [
-  { label: "GitHub", href: socialLinks.github, arrow: "↗" },
-  { label: "LinkedIn", href: socialLinks.linkedin, arrow: "↗" },
-  { label: "CodeChef", href: socialLinks.codechef, arrow: "↗" },
-  { label: "Codeforces", href: socialLinks.codeforces, arrow: "↗" },
-  { label: "LeetCode", href: socialLinks.leetcode, arrow: "↗" },
+  { label: "GitHub",     href: socialLinks.github   },
+  { label: "LinkedIn",   href: socialLinks.linkedin  },
+  { label: "CodeChef",   href: socialLinks.codechef  },
+  { label: "Codeforces", href: socialLinks.codeforces },
+  { label: "LeetCode",   href: socialLinks.leetcode  },
 ];
 
 export default function ContactPage() {
@@ -35,8 +34,8 @@ export default function ContactPage() {
         throw new Error(data.error || "Failed to send message.");
       }
       setSent(true);
-    } catch (err: any) {
-      setError(err.message || "Something went wrong. Please try again.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -133,6 +132,7 @@ export default function ContactPage() {
                     Name
                   </label>
                   <input
+                    id="contact-name"
                     type="text"
                     required
                     placeholder="Your name"
@@ -148,6 +148,7 @@ export default function ContactPage() {
                     Email
                   </label>
                   <input
+                    id="contact-email"
                     type="email"
                     required
                     placeholder="your@email.com"
@@ -163,6 +164,7 @@ export default function ContactPage() {
                     Message
                   </label>
                   <textarea
+                    id="contact-message"
                     required
                     rows={5}
                     placeholder="What are you working on?"
@@ -186,6 +188,7 @@ export default function ContactPage() {
                   </p>
                 )}
                 <motion.button
+                  id="contact-submit"
                   type="submit"
                   disabled={loading}
                   whileHover={loading ? {} : { scale: 1.015 }}
@@ -204,14 +207,14 @@ export default function ContactPage() {
                     opacity: loading ? 0.7 : 1,
                   }}
                 >
-                  {loading ? "Sending..." : "Send message →"}
+                  {loading ? "Sending…" : "Send message →"}
                 </motion.button>
               </form>
             )}
           </FadeUp>
         </div>
 
-        {/* Right: links + location */}
+        {/* Right: profile links */}
         <FadeUp delay={0.12}>
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             <div>
@@ -239,10 +242,12 @@ export default function ContactPage() {
                         transition: "border-color 0.2s, background 0.2s",
                       }}
                       onHoverStart={(e) => {
-                        const el = e.target as HTMLElement;
-                        if (el.closest(".link-row")) {
-                          (el.closest(".link-row") as HTMLElement).style.borderColor = "var(--border)";
-                        }
+                        const el = (e.target as HTMLElement).closest("div") as HTMLElement;
+                        if (el) el.style.borderColor = "var(--border)";
+                      }}
+                      onHoverEnd={(e) => {
+                        const el = (e.target as HTMLElement).closest("div") as HTMLElement;
+                        if (el) el.style.borderColor = "var(--border-subtle)";
                       }}
                     >
                       <span
@@ -255,7 +260,7 @@ export default function ContactPage() {
                       >
                         {link.label}
                       </span>
-                      <span style={{ fontSize: "0.85rem", color: "var(--text-3)" }}>{link.arrow}</span>
+                      <span style={{ fontSize: "0.85rem", color: "var(--text-3)" }}>↗</span>
                     </motion.div>
                   </a>
                 ))}

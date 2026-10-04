@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import { FadeUp } from "@/components/motion/FadeUp";
@@ -38,7 +37,7 @@ export default function ProjectsPage() {
           if (groupProjects.length === 0) return null;
 
           return (
-            <FadeUp key={group.id} delay={groupIdx * 0.1}>
+            <FadeUp key={group.id} delay={groupIdx * 0.08}>
               <section style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                 {/* Group Header */}
                 <div
@@ -80,7 +79,6 @@ export default function ProjectsPage() {
                       <motion.div
                         key={project.id}
                         onClick={(e) => {
-                          // Prevent triggering if clicking an anchor link inside
                           const target = e.target as HTMLElement;
                           if (target.closest("a")) return;
                           router.push(`/projects/${project.id}`);
@@ -114,7 +112,7 @@ export default function ProjectsPage() {
                             <h3
                               style={{
                                 fontFamily: "var(--font-sans)",
-                                fontSize: "clamp(1.15rem, 2.5vw, 1.4rem)",
+                                fontSize: "clamp(1.1rem, 2.5vw, 1.35rem)",
                                 fontWeight: 800,
                                 color: "var(--text)",
                                 letterSpacing: "-0.02em",
@@ -128,7 +126,8 @@ export default function ProjectsPage() {
                                 fontSize: "1.1rem",
                                 fontWeight: 600,
                                 color: project.accent,
-                                opacity: 0.8,
+                                opacity: 0.7,
+                                flexShrink: 0,
                               }}
                             >
                               {project.number}
@@ -148,13 +147,13 @@ export default function ProjectsPage() {
                           </p>
                         </div>
 
-                        {/* Description / Hook */}
+                        {/* Description */}
                         <p
                           style={{
                             fontFamily: "var(--font-sans)",
                             fontSize: "0.86rem",
                             color: "var(--text-2)",
-                            lineHeight: 1.55,
+                            lineHeight: 1.6,
                           }}
                         >
                           {project.description}
@@ -197,19 +196,19 @@ export default function ProjectsPage() {
                               href={link.href}
                               target="_blank"
                               rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()} // Stop routing click
+                              onClick={(e) => e.stopPropagation()}
                               style={{
                                 color: link.type === "live" ? "var(--kerala)" : "var(--text)",
                                 textDecoration: "none",
                                 display: "inline-flex",
                                 alignItems: "center",
-                                gap: "0.25rem",
-                                transition: "opacity 0.2s",
+                                gap: "0.3rem",
+                                transition: "opacity 0.15s",
                               }}
-                              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
+                              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.65")}
                               onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                             >
-                              {link.type === "github" ? "📦" : "⚡"} {link.label} ↗
+                              {link.type === "live" ? "⚡" : "↗"} {link.label}
                             </a>
                           ))}
                         </div>

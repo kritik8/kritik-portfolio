@@ -1,8 +1,5 @@
 "use client";
 
-import { motion } from "motion/react";
-import { locationMeta } from "@/data/experience";
-
 interface CareerMapProps {
   activeLocation: "delhi" | "kerala" | "bhopal" | null;
   onHoverLocation: (loc: "delhi" | "kerala" | "bhopal" | null) => void;

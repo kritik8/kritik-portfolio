@@ -1,26 +1,34 @@
 "use client";
 
-import { motion } from "motion/react";
 import { FadeUp } from "@/components/motion/FadeUp";
 import { convgruPaper, surveyPaper, surveyMeta } from "@/data/research";
-import { socialLinks } from "@/data/socials";
 
+// Survey paper is intentionally listed first
 const PAPERS = [
   {
-    type: "Review / Survey Paper",
+    type: "Review Paper",
     title: surveyPaper.title,
-    description: "A comprehensive 26-page survey synthesizing 50+ research papers on vehicular intrusion detection systems, covering security weaknesses, anomaly detection algorithms, and federated learning.",
+    status: surveyPaper.status,
+    description:
+      "A 26-page review synthesising 50+ research papers on vehicular intrusion detection systems, covering CAN-bus security weaknesses, anomaly detection algorithms, federated learning for privacy-preserving distributed IDS, scalability challenges, and real-time edge AI deployment.",
     contribution: surveyMeta.contribution,
     topics: surveyPaper.topics,
-    link: null,
+    link: null as string | null,
+    accentVar: "var(--violet)",
+    accentBgVar: "var(--violet-bg)",
   },
   {
     type: "Implementation Paper",
     title: convgruPaper.title,
-    description: "A lightweight hybrid deep learning model combining Conv1D local pattern extraction with GRU temporal sequence learning to detect CAN Bus attacks in real-time, achieving 99.95% accuracy.",
-    contribution: "Co-authored and implemented the hybrid neural network architecture. Handled dataset preprocessing, model evaluation, and baseline comparisons.",
+    status: convgruPaper.status,
+    description:
+      "A lightweight hybrid deep learning model combining Conv1D local pattern extraction with GRU temporal sequence modelling for real-time CAN bus attack detection — achieving 99.95% accuracy on a balanced 500,000-sample dataset.",
+    contribution:
+      "Co-authored and implemented the hybrid neural network architecture. Responsible for dataset preprocessing, model evaluation, and baseline comparisons against Logistic Regression, Random Forest, and simple CNN baselines.",
     topics: convgruPaper.topics,
-    link: socialLinks.github, // ConvGRU code/repo is on Kritik's GitHub
+    link: "https://github.com/kritik8",
+    accentVar: "var(--text-2)",
+    accentBgVar: "var(--surface)",
   },
 ];
 
@@ -29,7 +37,7 @@ export default function ResearchPage() {
     <main className="wrap page-pad">
       {/* Header */}
       <FadeUp>
-        <p className="label" style={{ marginBottom: "0.65rem" }}>Research Archive</p>
+        <p className="label" style={{ marginBottom: "0.65rem" }}>Research</p>
         <h1
           className="serif"
           style={{
@@ -41,7 +49,7 @@ export default function ResearchPage() {
             marginBottom: "0.75rem",
           }}
         >
-          From ideas to evidence.
+          Research in Intelligent Systems
         </h1>
         <p
           style={{
@@ -53,12 +61,12 @@ export default function ResearchPage() {
             marginBottom: "3.5rem",
           }}
         >
-          Vehicular CAN Bus security — from systematic literature reviews to lightweight deep learning implementations.
+          Vehicular CAN bus security — from systematic literature review to lightweight deep learning implementation.
         </p>
       </FadeUp>
 
       {/* Research List */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
         {PAPERS.map((paper, index) => (
           <FadeUp key={paper.title} delay={0.08 * (index + 1)}>
             <div
@@ -74,17 +82,17 @@ export default function ResearchPage() {
                 position: "relative",
               }}
             >
-              {/* Type Badge */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              {/* Type Badge + Status */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem" }}>
                 <span
                   style={{
                     fontFamily: "var(--font-mono)",
                     fontSize: "0.58rem",
                     fontWeight: 700,
-                    color: paper.type.includes("Survey") ? "var(--text-2)" : "var(--violet)",
-                    background: paper.type.includes("Survey") ? "var(--surface)" : "var(--violet-bg)",
+                    color: paper.accentVar === "var(--violet)" ? "var(--violet)" : "var(--text-2)",
+                    background: paper.accentBgVar,
                     border: "1px solid",
-                    borderColor: paper.type.includes("Survey") ? "var(--border)" : "var(--violet)22",
+                    borderColor: paper.accentVar === "var(--violet)" ? "rgba(98,70,200,0.2)" : "var(--border)",
                     padding: "0.22rem 0.75rem",
                     borderRadius: "100px",
                     letterSpacing: "0.06em",
@@ -93,23 +101,19 @@ export default function ResearchPage() {
                 >
                   {paper.type}
                 </span>
-                {paper.link && (
-                  <a
-                    href={paper.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                {paper.status && (
+                  <span
                     style={{
                       fontFamily: "var(--font-mono)",
-                      fontSize: "0.68rem",
+                      fontSize: "0.58rem",
+                      fontWeight: 500,
                       color: "var(--text-3)",
-                      textDecoration: "none",
-                      transition: "color 0.15s",
+                      letterSpacing: "0.04em",
+                      alignSelf: "center",
                     }}
-                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text)")}
-                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-3)")}
                   >
-                    View Code ↗
-                  </a>
+                    {paper.status}
+                  </span>
                 )}
               </div>
 
@@ -117,11 +121,11 @@ export default function ResearchPage() {
               <h2
                 className="serif"
                 style={{
-                  fontSize: "clamp(1.3rem, 2.5vw, 1.7rem)",
+                  fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)",
                   fontWeight: 500,
                   color: "var(--text)",
                   letterSpacing: "-0.015em",
-                  lineHeight: 1.3,
+                  lineHeight: 1.35,
                   maxWidth: "92%",
                 }}
               >
@@ -134,7 +138,7 @@ export default function ResearchPage() {
                   fontFamily: "var(--font-sans)",
                   fontSize: "0.88rem",
                   color: "var(--text-2)",
-                  lineHeight: 1.6,
+                  lineHeight: 1.65,
                 }}
               >
                 {paper.description}
@@ -159,14 +163,14 @@ export default function ResearchPage() {
                     textTransform: "uppercase",
                   }}
                 >
-                  My Contribution
+                  Contribution
                 </span>
                 <p
                   style={{
                     fontFamily: "var(--font-sans)",
                     fontSize: "0.84rem",
                     color: "var(--text-2)",
-                    lineHeight: 1.5,
+                    lineHeight: 1.55,
                     fontStyle: "italic",
                   }}
                 >
@@ -174,21 +178,42 @@ export default function ResearchPage() {
                 </p>
               </div>
 
-              {/* Topics tag list */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
-                {paper.topics.map((t) => (
-                  <span
-                    key={t}
-                    className="pill"
+              {/* Topic tags + optional link */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "0.75rem" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+                  {paper.topics.map((t) => (
+                    <span
+                      key={t}
+                      className="pill"
+                      style={{
+                        fontSize: "0.58rem",
+                        background: "var(--surface)",
+                        border: "1px solid var(--border-subtle)",
+                      }}
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                {paper.link && (
+                  <a
+                    href={paper.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
-                      fontSize: "0.58rem",
-                      background: "var(--surface)",
-                      border: "1px solid var(--border-subtle)",
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "0.68rem",
+                      color: "var(--text-3)",
+                      textDecoration: "none",
+                      transition: "color 0.15s",
+                      flexShrink: 0,
                     }}
+                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text)")}
+                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-3)")}
                   >
-                    {t}
-                  </span>
-                ))}
+                    View on GitHub ↗
+                  </a>
+                )}
               </div>
             </div>
           </FadeUp>

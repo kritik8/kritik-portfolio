@@ -9,14 +9,14 @@ import { socialLinks } from "@/data/socials";
 const CODING_PROFILES = [
   {
     platform: "LeetCode",
-    rating: "1580",
+    rating: "1700",
     badge: null,
     badgeLabel: null,
     url: socialLinks.leetcode,
   },
   {
     platform: "Codeforces",
-    rating: "1270",
+    rating: "1357",
     badge: "PUPIL",
     badgeLabel: "Pupil",
     url: socialLinks.codeforces,
@@ -40,23 +40,34 @@ const RANK_SYMBOL: Record<string, string> = {
 export default function AboutPage() {
   return (
     <main className="wrap page-pad">
-      {/* ── Header: biography + quick facts side-by-side ── */}
+      {/* ── Header: identity + quick facts ── */}
       <section style={{ marginBottom: "3.5rem" }}>
         <FadeUp>
-          <p className="label" style={{ marginBottom: "1rem" }}>Biography</p>
+          <p className="label" style={{ marginBottom: "0.75rem" }}>About</p>
           <h1
             className="serif"
             style={{
-              fontSize: "clamp(2.2rem, 6vw, 4rem)",
-              fontWeight: 700,
-              letterSpacing: "-0.04em",
-              lineHeight: 1.0,
+              fontSize: "clamp(1.9rem, 5vw, 3.2rem)",
+              fontWeight: 500,
+              letterSpacing: "-0.03em",
+              lineHeight: 1.12,
               color: "var(--text)",
+              marginBottom: "0.5rem",
+            }}
+          >
+            Backend Engineer
+          </h1>
+          <p
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.7rem",
+              color: "var(--text-3)",
+              letterSpacing: "0.08em",
               marginBottom: "2rem",
             }}
           >
-            Kritik Jain
-          </h1>
+            Node.js · Go · Distributed Systems · Applied AI &amp; LLMs
+          </p>
         </FadeUp>
 
         <FadeUp delay={0.08}>
@@ -72,9 +83,9 @@ export default function AboutPage() {
                 color: "var(--text-2)",
               }}
             >
-              Final-year B.Tech Information Technology student at IIIT Bhopal. I work at the intersection of backend
-              engineering, AI/LLM systems, applied machine learning, and research. I care deeply about building things
-              that are both technically rigorous and genuinely useful.
+              Final-year B.Tech student at IIIT Bhopal, working at the intersection of backend
+              engineering, AI/LLM systems, and applied machine learning. I care about building things
+              that are technically rigorous and genuinely useful.
             </p>
 
             {/* Quick facts */}
@@ -118,7 +129,7 @@ export default function AboutPage() {
 
       <div style={{ height: 1, background: "var(--border-subtle)", marginBottom: "3rem" }} />
 
-      {/* ── Coding Profiles ── */}
+      {/* ── Competitive Programming ── */}
       <section style={{ marginBottom: "3rem" }}>
         <FadeUp>
           <p className="label" style={{ marginBottom: "1.25rem" }}>Competitive Programming</p>

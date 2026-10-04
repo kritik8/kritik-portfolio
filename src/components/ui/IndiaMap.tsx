@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { locationMeta } from "@/data/experience";
 

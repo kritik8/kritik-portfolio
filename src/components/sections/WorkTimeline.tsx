@@ -3,9 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { experiences, locationMeta } from "@/data/experience";
-import dynamic from "next/dynamic";
-const GlobeView = dynamic(() => import("@/components/ui/GlobeView"), { ssr: false });
-
+import GlobeView from "@/components/ui/GlobeView";
 
 type LocationKey = "delhi" | "kerala" | "bhopal" | "chennai";
 
@@ -282,6 +280,7 @@ export default function WorkTimeline() {
           alignSelf: "flex-start",
         }}
       >
+        {/* Interactive 3D Globe with enlarged India focus */}
         <GlobeView activeId={activeId} setActiveId={setActiveId} />
 
         {/* Dynamic context card */}
