@@ -216,7 +216,7 @@ export default function GlobeCanvas({ activeId, setActiveId }: GlobeCanvasProps)
           inset: 0,
           background: isDark
             ? "radial-gradient(circle at 50% 50%, rgba(77, 166, 232, 0.08) 0%, transparent 70%)"
-            : "radial-gradient(circle at 50% 50%, rgba(46, 116, 192, 0.05) 0%, transparent 70%)",
+            : "radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.02) 0%, transparent 70%)",
           pointerEvents: "none",
           zIndex: 1,
         }}
@@ -321,9 +321,9 @@ export default function GlobeCanvas({ activeId, setActiveId }: GlobeCanvasProps)
           width={dimensions.width}
           height={dimensions.height}
           backgroundColor="rgba(0,0,0,0)"
-          globeImageUrl={isDark ? "/earth-dark.jpg" : "/earth-day.jpg"}
-          showAtmosphere={true}
-          atmosphereColor={isDark ? "#3A7BD5" : "#68A5E8"}
+          globeImageUrl={isDark ? "/earth-dark.jpg" : "/earth-light.jpg"}
+          showAtmosphere={isDark}
+          atmosphereColor={isDark ? "#3A7BD5" : "rgba(0,0,0,0)"}
           atmosphereAltitude={0.14}
           
           // Points
